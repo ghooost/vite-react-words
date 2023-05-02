@@ -1,9 +1,9 @@
 import { Outlet } from "react-router-dom";
 import { Menu } from "@components/Menu";
 import { useSelector } from "react-redux";
-import { selectCollectionsState } from "@store/collectionsSelectors";
 
 import styles from "./styles.module.css";
+import { selectCollectionsState } from "@store/collectionsSlice";
 
 export const Page = function () {
   const loadingState = useSelector(selectCollectionsState);

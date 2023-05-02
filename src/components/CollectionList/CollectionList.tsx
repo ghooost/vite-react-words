@@ -2,7 +2,7 @@ import { NavLink } from "react-router-dom";
 
 import styles from "./styles.module.css";
 import { useSelector } from "react-redux";
-import { selectAllCollections } from "@store/collectionsSelectors";
+import { selectAllCollections } from "@store/collectionsSlice";
 
 const getClassName = ({
   isActive,

@@ -1,11 +1,12 @@
-import {
-  selectCollectionsPreparationState,
-  selectQuizData,
-} from "@store/collectionsSelectors";
 import { useCallback, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "@store/index";
-import { prepareSelectedCollectios, updateQuiz } from "@store/collectionsSlice";
+import {
+  prepareSelectedCollectios,
+  selectCollectionsPreparationState,
+  selectQuizData,
+  updateQuiz,
+} from "@store/collectionsSlice";
 
 import styles from "./styles.module.css";
 

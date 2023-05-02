@@ -14,3 +14,16 @@
 .main {
   flex: 1 1 auto;
 }
+
+.serviceHolder {
+  padding: 1.5em 1em;
+  display: block;
+  text-decoration: none;
+  background-color: silver;
+}
+
+.service {
+  text-decoration: underline;
+  color: black;
+  cursor: pointer;
+}

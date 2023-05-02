@@ -1,8 +1,3 @@
-// I can't load sheets data in parallel, that's why
-// there is a queue
-
-type Status = "waiting" | "loading" | "ready" | "error";
-
 // GoogleSheet types
 interface GoogleSheetCell {
   v: string;
@@ -18,131 +13,39 @@ export interface GoogleSheetData {
   };
 }
 
-export interface CacheItem {
-  id: string;
-  status: Status;
-  promise: Promise<GoogleSheetData>;
-  funcResolve?: (data: GoogleSheetData) => void;
-  funcReject?: (reason?: string) => void;
+export interface TranslatedPair {
+  orig: string;
+  translation: string;
 }
 
-type InitApiCallback = (data: GoogleSheetData) => void;
-
-export type GoogledWindow = {
-  google?: {
-    visualization: {
-      Query: {
-        setResponse: InitApiCallback;
-      };
-    };
-  };
-};
-
-interface Settings {
-  window?: GoogledWindow;
-  document?: Document;
-  cache: CacheItem[];
-}
-
-const settings: Settings = {
-  cache: [],
-};
-
-// to make tests painless
-export const setSettings = (
-  winObj?: GoogledWindow,
-  docObj?: Document,
-  cache?: CacheItem[]
-) => {
-  if (winObj) {
-    settings.window = winObj;
-  }
-  if (docObj) {
-    settings.document = docObj;
-  }
-  if (cache) {
-    settings.cache = cache;
-  }
-};
-
-export const getSettings = () => settings;
-
-export const loadGoogleSheet = (id: string) => {
-  const promise = createDataPromise(id);
-  touchTheQueue();
-  return promise;
-};
-// utils that can be tested
-export const createDataPromise = (id: string) => {
-  const { cache } = settings;
-  const item = cache.find(({ id: itemId }) => id === itemId);
-  if (item) {
-    return item.promise;
-  }
-  let funcResolve;
-  let funcReject;
-  const newItem: CacheItem = {
-    id,
-    status: "waiting",
-    promise: new Promise((resolve, reject) => {
-      funcResolve = resolve;
-      funcReject = reject;
-    }),
-  };
-  newItem.funcResolve = funcResolve;
-  newItem.funcReject = funcReject;
-  cache.push(newItem);
-  return newItem.promise;
-};
-
-export const initApi = (cbFunc: InitApiCallback) => {
-  const { window } = settings;
-  if (window?.google || !window) {
-    return;
-  }
-  window.google = {
-    visualization: {
-      Query: {
-        setResponse: (data: GoogleSheetData) => {
-          cbFunc(data);
-        },
-      },
-    },
-  };
-};
-
-export const touchTheQueue = () => {
-  const { cache } = settings;
-  const itemThatLoading = cache.find(({ status }) => status === "loading");
-  if (itemThatLoading) {
-    return;
-  }
-  const itemToLoad = cache.find(({ status }) => status === "waiting");
-  if (!itemToLoad) {
-    return;
-  }
-  initApi(onSheetLoaded);
-  itemToLoad.status = "loading";
-  startLoading(itemToLoad.id);
-};
-
-const startLoading = (id: string) => {
-  const { document } = settings;
-  if (!document) {
-    return;
-  }
+export const loadGoogleSheet = async (id: string) => {
   const url = `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:json&sheet=&tq=select%20*`;
-  const node = document.createElement("script");
-  node.src = url;
-  document.head.appendChild(node);
+  try {
+    let data = await fetch(url).then((response) => response.text());
+    data = data.replace(/^.+setResponse\(/imsu, "");
+    data = data.replace(/\);$/imsu, "");
+    return JSON.parse(data) as GoogleSheetData;
+  } catch (_) {
+    return null;
+  }
 };
 
-const onSheetLoaded = (data: GoogleSheetData) => {
-  const { cache } = settings;
-  const itemThatLoading = cache.find(({ status }) => status === "loading");
-  if (itemThatLoading && itemThatLoading.funcResolve) {
-    itemThatLoading.status = "ready";
-    itemThatLoading.funcResolve(data);
+export const loadTranslatedPairsFromGoogleSheet = async (id: string) => {
+  const data = await loadGoogleSheet(id);
+  if (data === null) {
+    return [];
   }
-  touchTheQueue();
+  return data?.table.rows.reduce((acc, { c: cells }) => {
+    if (cells.length < 2) {
+      return acc;
+    }
+    if (!cells[0]?.v || !cells[1]?.v) {
+      return acc;
+    }
+    acc.push({
+      orig: cells[0].v,
+      translation: cells[1].v,
+    });
+    return acc;
+  }, [] as TranslatedPair[]);
 };

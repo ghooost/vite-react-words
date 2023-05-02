@@ -1,0 +1,31 @@
+.root {
+  padding: 1em;
+}
+
+.field {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 1em;
+  align-items: center;
+}
+
+.label {
+  flex: 0 0 100px;
+}
+
+.input {
+  display: block;
+  padding: 0.5em;
+  box-sizing: border-box;
+  flex: 1 1 auto;
+}
+
+.service {
+  padding: 0.5em;
+  margin-right: 1em;
+  cursor: pointer;
+}
+
+a.service {
+  text-decoration: underline;
+}

@@ -1,18 +1,16 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import {
+  createAsyncThunk,
+  createSelector,
+  createSlice,
+} from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from ".";
 import {
-  selectCollectionsPreparationState,
-  selectSelectedCollections,
-} from "./collectionsSelectors";
-import { GoogledWindow, loadGoogleSheet, setSettings } from "@api/googleSheet";
+  TranslatedPair,
+  loadTranslatedPairsFromGoogleSheet,
+} from "@api/googleSheet";
 
 type State = "empty" | "loading" | "saving" | "ready";
-
-export interface TranslatedPair {
-  orig: string;
-  translation: string;
-}
 
 export interface Collection {
   id: string;
@@ -76,7 +74,7 @@ export const saveCollections = createAsyncThunk(
 );
 
 export const prepareSelectedCollectios = createAsyncThunk(
-  "collections/loadWordsForSelectedCollectios",
+  "collections/prepareSelectedCollectios",
   async (_, thunkApi) => {
     const state = thunkApi.getState() as RootState;
     const preparationState = selectCollectionsPreparationState(state);
@@ -89,21 +87,9 @@ export const prepareSelectedCollectios = createAsyncThunk(
     for (const collection of collections) {
       if (collection.state === "empty") {
         // load data from GS
-        setSettings(window as GoogledWindow, document);
-        const data = await loadGoogleSheet(collection.sheetId);
-        const words = data?.table.rows.reduce((acc, { c: cells }) => {
-          if (cells.length < 2) {
-            return acc;
-          }
-          if (!cells[0]?.v || !cells[1]?.v) {
-            return acc;
-          }
-          acc.push({
-            orig: cells[0].v,
-            translation: cells[1].v,
-          });
-          return acc;
-        }, [] as TranslatedPair[]);
+        const words = await loadTranslatedPairsFromGoogleSheet(
+          collection.sheetId
+        );
         thunkApi.dispatch(
           updateCollection({
             id: collection.id,
@@ -125,7 +111,7 @@ export const prepareSelectedCollectios = createAsyncThunk(
 );
 
 export const loadCollectionData = createAsyncThunk(
-  "collections/saveCollections",
+  "collections/loadCollectionData",
   async (id: string, thunkApi) => {
     thunkApi.dispatch(
       updateCollection({
@@ -134,10 +120,19 @@ export const loadCollectionData = createAsyncThunk(
       })
     );
     const state = thunkApi.getState() as RootState;
-    localStorage.setItem(
-      "collections",
-      JSON.stringify(state.collections.collections)
+    const collection = selectCollectionDataById(state, id);
+    if (!collection || !collection?.sheetId) {
+      return false;
+    }
+    const words = await loadTranslatedPairsFromGoogleSheet(collection.sheetId);
+    thunkApi.dispatch(
+      updateCollection({
+        id: collection.id,
+        state: "ready",
+        words,
+      })
     );
+
     return true;
   }
 );
@@ -150,6 +145,28 @@ export const createNewCollection = createAsyncThunk(
     thunkApi.dispatch(createCollection(id));
     await thunkApi.dispatch(saveCollections());
     return id;
+  }
+);
+
+export const removeCollectionById = createAsyncThunk(
+  "collections/removeCollectionById",
+  async (id: string, thunkApi) => {
+    thunkApi.dispatch(removeCollection(id));
+    await thunkApi.dispatch(saveCollections());
+  }
+);
+
+export const updateCollectionById = createAsyncThunk(
+  "collections/updateCollectionById",
+  async ({ name, id, sheetId }: UpdateCollectionStatePayload, thunkApi) => {
+    thunkApi.dispatch(
+      updateCollection({
+        id,
+        name,
+        sheetId,
+      })
+    );
+    await thunkApi.dispatch(saveCollections());
   }
 );
 
@@ -187,6 +204,7 @@ export const collectionsSlice = createSlice({
       state.cachedIndexes = cachedIndexes;
     },
     createCollection: (state, action: PayloadAction<string>) => {
+      console.log("create collection?");
       state.collections = [
         {
           id: action.payload,
@@ -198,6 +216,13 @@ export const collectionsSlice = createSlice({
         ...state.collections,
       ];
     },
+    removeCollection: (state, action: PayloadAction<string>) => {
+      state.collections = state.collections.filter(
+        ({ id: itemId }) => itemId !== action.payload
+      );
+      console.log("remove", action.payload);
+      console.log(state.collections);
+    },
     updateCollection: (
       state,
       action: PayloadAction<UpdateCollectionStatePayload>
@@ -208,6 +233,7 @@ export const collectionsSlice = createSlice({
         isSelected,
         sheetId,
         words,
+        name,
       } = action.payload;
       if (!cId) {
         return;
@@ -216,16 +242,23 @@ export const collectionsSlice = createSlice({
       if (!item) {
         return;
       }
-      if (newState) {
+      if (newState !== undefined) {
         item.state = newState;
       }
-      if (isSelected) {
+      if (isSelected !== undefined) {
         item.isSelected = isSelected;
       }
-      if (sheetId) {
+      if (sheetId !== undefined) {
+        if (sheetId !== item.sheetId) {
+          item.words = [];
+          item.state = "empty";
+        }
         item.sheetId = sheetId;
       }
-      if (words) {
+      if (name !== undefined) {
+        item.name = name;
+      }
+      if (words !== undefined) {
         item.words = words;
       }
     },
@@ -262,6 +295,93 @@ export const {
   updateQuiz,
   setPreparationState,
   createCollection,
+  removeCollection,
 } = collectionsSlice.actions;
+
+// selectors
+export const selectCollections = (state: RootState) => state.collections;
+
+export const selectCollectionsState = createSelector(
+  selectCollections,
+  (state) => state.state
+);
+
+export const selectAllCollections = createSelector(
+  selectCollections,
+  (state) => state.collections
+);
+
+export const selectSelectedCollections = createSelector(
+  [selectAllCollections],
+  (collections) => collections.filter(({ isSelected }) => isSelected)
+);
+
+export const selectCollectionsPreparationState = createSelector(
+  selectCollections,
+  (state) => state.preparationState
+);
+
+export const selectCollectionDataById = createSelector(
+  [selectAllCollections, (_, id: string) => id],
+  (collections, id) => collections.find(({ id: itemId }) => itemId === id)
+);
+
+export const selectCollectionIdAfterDeletion = createSelector(
+  [selectAllCollections, (_, id: string) => id],
+  (collections, id) => {
+    const index = collections.findIndex(({ id: itemId }) => itemId === id);
+    if (index < 0) {
+      return id;
+    }
+    if (collections.length === 1) {
+      return "";
+    }
+    if (index >= collections.length - 1) {
+      return collections[index - 1].id;
+    }
+    return collections[index + 1].id;
+  }
+);
+
+interface QuizData {
+  quest: string;
+  answer: string;
+  fakes: string[];
+}
+
+export const selectQuizData = createSelector(
+  selectCollections,
+  ({ preparationState, cachedWords, cachedIndexes }) => {
+    if (preparationState !== "ready") {
+      return null;
+    }
+
+    if (cachedIndexes.length === 0) {
+      return null;
+    }
+
+    if (cachedWords.length === 0) {
+      return null;
+    }
+
+    const showIndex = cachedIndexes[0];
+    const fakeOptions = [showIndex];
+
+    while (fakeOptions.length < 5 && fakeOptions.length < cachedWords.length) {
+      const index = Math.floor(Math.random() * cachedWords.length);
+      if (!fakeOptions.includes(index)) {
+        fakeOptions.push(index);
+      }
+    }
+
+    const ret: QuizData = {
+      quest: cachedWords[showIndex].orig,
+      answer: cachedWords[showIndex].translation,
+      fakes: fakeOptions.map((index) => cachedWords[index].translation),
+    };
+
+    return ret;
+  }
+);
 
 export default collectionsSlice.reducer;
