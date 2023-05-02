@@ -1,4 +1,4 @@
-import { afterEach, vi, describe, expect, it, beforeEach } from "vitest";
+import { afterEach, vi, describe, expect, it } from "vitest";
 import * as GS from "./googleSheet";
 
 const defFetch = global.fetch;

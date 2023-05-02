@@ -1,17 +1,6 @@
-import { configureStore } from "@reduxjs/toolkit";
-import collectionsSlice, {
-  createNewCollection,
-  loadCollections,
-  removeCollection,
-  removeCollectionById,
-} from "./collectionsSlice";
 import { useDispatch } from "react-redux";
-import {
-  ActionFunction,
-  ActionFunctionArgs,
-  LoaderFunctionArgs,
-  redirect,
-} from "react-router-dom";
+import { configureStore } from "@reduxjs/toolkit";
+import collectionsSlice from "./collectionsSlice";
 
 export const store = configureStore({
   reducer: {
