@@ -13,4 +13,7 @@ export default defineConfig({
       "@router": path.resolve(__dirname, "./src/router"),
     },
   },
+  build: {
+    outDir: "./docs",
+  },
 });
