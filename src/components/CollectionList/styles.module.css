@@ -1,0 +1,23 @@
+.root {
+  width: 100%;
+}
+
+.item {
+  padding: 1em;
+  display: block;
+  text-decoration: none;
+  color: black;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.active {
+  color: white;
+  background-color: black;
+}
+
+.pending {
+  color: white;
+  background-color: black;
+  opacity: 0.5;
+}

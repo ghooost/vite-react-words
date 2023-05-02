@@ -1,0 +1,33 @@
+.root {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.quest {
+  padding: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: black;
+  flex: 1 1 auto;
+  font-size: 2em;
+}
+
+.answers {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.answer {
+  padding: 1em;
+  text-decoration: none;
+  color: black;
+  cursor: pointer;
+}

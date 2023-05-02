@@ -1,0 +1,16 @@
+.root {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
+.menu {
+  border-right: 1px solid black;
+  flex: 0 0 150px;
+}
+
+.main {
+  flex: 1 1 auto;
+}

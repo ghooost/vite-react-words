@@ -1,0 +1,8 @@
+.main {
+  flex: 1 1 100px;
+  display: flex;
+}
+
+.header {
+  flex: 0 0 50px;
+}

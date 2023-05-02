@@ -1,0 +1,26 @@
+.root {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  border-bottom: 1px solid black;
+}
+
+.item {
+  padding: 1em;
+  display: block;
+  text-decoration: none;
+  color: black;
+}
+
+.active {
+  color: white;
+  background-color: black;
+}
+
+.pending {
+  color: white;
+  background-color: black;
+  opacity: 0.5;
+}
