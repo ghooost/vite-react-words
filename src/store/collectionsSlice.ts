@@ -158,12 +158,16 @@ export const removeCollectionById = createAsyncThunk(
 
 export const updateCollectionById = createAsyncThunk(
   "collections/updateCollectionById",
-  async ({ name, id, sheetId }: UpdateCollectionStatePayload, thunkApi) => {
+  async (
+    { name, id, sheetId, isSelected }: UpdateCollectionStatePayload,
+    thunkApi
+  ) => {
     thunkApi.dispatch(
       updateCollection({
         id,
         name,
         sheetId,
+        isSelected,
       })
     );
     await thunkApi.dispatch(saveCollections());

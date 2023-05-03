@@ -1,7 +1,9 @@
 import {
   ActionFunctionArgs,
   LoaderFunctionArgs,
+  Route,
   createBrowserRouter,
+  createRoutesFromElements,
   redirect,
 } from "react-router-dom";
 import { Page } from "@components/Page";
@@ -40,18 +42,20 @@ export const actionCreate = async () => {
 export const actionDelete = async ({ params }: ActionFunctionArgs) => {
   const { collectionId } = params;
   if (!collectionId) {
-    return redirect("/setup");
+    return redirect(`${Base}/setup`);
   }
   const nextId = selectCollectionIdAfterDeletion(
     store.getState(),
     collectionId
   );
   await store.dispatch(removeCollectionById(collectionId));
-  return redirect(`/setup/${nextId}`);
+  return redirect(`${Base}/setup/${nextId}`);
 };
 
 export const actionUpdate = async ({ request, params }: ActionFunctionArgs) => {
-  const { name, sheetId } = Object.fromEntries(await request.formData());
+  const { name, sheetId, isSelected } = Object.fromEntries(
+    await request.formData()
+  );
   const { collectionId } = params;
   if (!collectionId) {
     return;
@@ -61,42 +65,31 @@ export const actionUpdate = async ({ request, params }: ActionFunctionArgs) => {
       id: collectionId,
       sheetId: sheetId.toString(),
       name: name.toString(),
+      isSelected: isSelected !== undefined,
     })
   );
-  return redirect(`/setup/${collectionId}`);
+  return redirect(`${Base}/setup/${collectionId}`);
 };
 
-export const router = createBrowserRouter([
-  {
-    path: Base,
-    id: "root",
-    element: <Page />,
-    errorElement: <ErrorPage />,
-    loader: rootLoader,
-    children: [
-      {
-        path: "",
-        element: <Home />,
-      },
-      {
-        path: "setup",
-        element: <Setup />,
-        action: actionCreate,
-        children: [
-          {
-            path: ":collectionId",
-            loader: collectionLoader,
-            action: actionUpdate,
-            element: <CollectionEdit />,
-            children: [
-              {
-                path: "delete",
-                action: actionDelete,
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  },
-]);
+export const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route
+      path={Base}
+      element={<Page />}
+      errorElement={<ErrorPage />}
+      loader={rootLoader}
+    >
+      <Route index element={<Home />} />
+      <Route path={"setup"} element={<Setup />} action={actionCreate}>
+        <Route
+          path={":collectionId"}
+          loader={collectionLoader}
+          action={actionUpdate}
+          element={<CollectionEdit />}
+        >
+          <Route path="delete" action={actionDelete}></Route>
+        </Route>
+      </Route>
+    </Route>
+  )
+);

@@ -13,5 +13,5 @@ export default defineConfig({
       "@router": path.resolve(__dirname, "./src/router"),
     },
   },
-  base: "/vite-react-words/",
+  base: "/vite-react-words",
 });

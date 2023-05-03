@@ -26,6 +26,12 @@ export const CollectionEdit = function () {
     submit(null, { method: "delete", action: "delete" });
   }, [submit]);
 
+  const numberOfWords = data?.words?.length ?? 0;
+  const topWords = data?.words
+    ?.slice(0, 5)
+    .map(({ orig }) => orig)
+    .join(", ");
+
   return (
     <div className={styles.root}>
       <Form method="post">
@@ -55,19 +61,42 @@ export const CollectionEdit = function () {
             key={`isSelected${collectionId}`}
             name="isSelected"
             type="checkbox"
+            value="1"
             defaultChecked={data?.isSelected}
           />
         </label>
-        {data?.state === "ready" && (
-          <div className={styles.field}>{data?.words?.length} words loaded</div>
-        )}
+        <label className={styles.field}>
+          <div className={styles.label}>Words</div>
+          {data?.state === "ready" && numberOfWords > 5 && (
+            <div className={styles.subfield}>
+              {`${topWords}... (${numberOfWords} words loaded)`}
+            </div>
+          )}
+          {data?.state === "ready" &&
+            numberOfWords < 5 &&
+            numberOfWords > 0 && (
+              <div className={styles.subfield}>
+                {`${topWords} (${numberOfWords} words loaded)`}
+              </div>
+            )}
+          {data?.state === "ready" && numberOfWords === 0 && (
+            <div className={styles.subfield}>No words loaded</div>
+          )}
+          {data?.state === "loading" && (
+            <div className={styles.subfield}>Loading...</div>
+          )}
+          {data?.state !== "loading" && (
+            <div className={styles.subfield}>
+              <a className={styles.service} onClick={handleReload}>
+                Reload
+              </a>
+            </div>
+          )}
+        </label>
         <div className={styles.field}>
           <button className={styles.service} type="submit">
             Update
           </button>
-          <a className={styles.service} onClick={handleReload}>
-            Reload words
-          </a>
           <a className={styles.service} onClick={handleDelete}>
             Delete
           </a>
