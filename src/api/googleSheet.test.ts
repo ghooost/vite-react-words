@@ -3,6 +3,7 @@ import * as GS from "./googleSheet";
 
 const defFetch = global.fetch;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const createGSResponse = (data: any) => {
   return {
     text: () =>
