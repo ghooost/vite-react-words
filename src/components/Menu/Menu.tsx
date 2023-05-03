@@ -22,7 +22,7 @@ export const Menu = function () {
       <NavLink to={Base} end className={getClassName}>
         Home
       </NavLink>
-      <NavLink to={`${Base}/setup`} className={getClassName}>
+      <NavLink to={`${Base}setup`} className={getClassName}>
         Setup
       </NavLink>
     </nav>

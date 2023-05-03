@@ -42,14 +42,14 @@ export const actionCreate = async () => {
 export const actionDelete = async ({ params }: ActionFunctionArgs) => {
   const { collectionId } = params;
   if (!collectionId) {
-    return redirect(`${Base}/setup`);
+    return redirect(`${Base}setup`);
   }
   const nextId = selectCollectionIdAfterDeletion(
     store.getState(),
     collectionId
   );
   await store.dispatch(removeCollectionById(collectionId));
-  return redirect(`${Base}/setup/${nextId}`);
+  return redirect(`${Base}setup/${nextId}`);
 };
 
 export const actionUpdate = async ({ request, params }: ActionFunctionArgs) => {
@@ -68,7 +68,7 @@ export const actionUpdate = async ({ request, params }: ActionFunctionArgs) => {
       isSelected: isSelected !== undefined,
     })
   );
-  return redirect(`${Base}/setup/${collectionId}`);
+  return redirect(`${Base}setup/${collectionId}`);
 };
 
 export const router = createBrowserRouter(
