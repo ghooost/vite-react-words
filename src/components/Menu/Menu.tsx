@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import { Base } from "@router/contants";
 
 import styles from "./styles.module.css";
 
@@ -18,10 +19,10 @@ const getClassName = ({
 export const Menu = function () {
   return (
     <nav className={styles.root}>
-      <NavLink to={`/`} className={getClassName}>
+      <NavLink to={Base} end className={getClassName}>
         Home
       </NavLink>
-      <NavLink to={`/setup`} className={getClassName}>
+      <NavLink to={`${Base}/setup`} className={getClassName}>
         Setup
       </NavLink>
     </nav>

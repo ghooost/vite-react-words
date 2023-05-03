@@ -17,6 +17,7 @@ import {
   selectCollectionIdAfterDeletion,
   updateCollectionById,
 } from "@store/collectionsSlice";
+import { Base } from "@router/contants";
 
 // loaders
 export const rootLoader = async () => {
@@ -67,7 +68,7 @@ export const actionUpdate = async ({ request, params }: ActionFunctionArgs) => {
 
 export const router = createBrowserRouter([
   {
-    path: "/",
+    path: Base,
     id: "root",
     element: <Page />,
     errorElement: <ErrorPage />,

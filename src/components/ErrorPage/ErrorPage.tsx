@@ -5,7 +5,7 @@ export const ErrorPage = function () {
     <div>
       <h1>There is an Error</h1>
       <p>
-        <Link to={`/`}>Come back to index</Link>
+        <Link to={`/vite-react-words`}>Come back to index</Link>
       </p>
     </div>
   );
