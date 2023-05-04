@@ -5,7 +5,7 @@ import {
   selectCollectionDataById,
 } from "@store/collectionsSlice";
 import { useAppDispatch } from "@store/index";
-import { useCallback, useRef, useState } from "react";
+import { useCallback } from "react";
 import { useSelector } from "react-redux";
 import { Form, useLoaderData, useSubmit } from "react-router-dom";
 import styles from "./styles.module.css";

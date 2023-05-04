@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import { selectAllCollections } from "@store/collectionsSlice";
 
 import styles from "./styles.module.css";
-import { ReactComponent as StarIco } from "./assets/star.svg";
 import { Icon } from "@components/Icon";
 
 const getClassName =
