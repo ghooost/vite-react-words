@@ -84,6 +84,7 @@ export const prepareSelectedCollectios = createAsyncThunk(
     thunkApi.dispatch(setPreparationState("loading"));
     const collections = selectSelectedCollections(state);
     let updatedCollections = 0;
+
     for (const collection of collections) {
       if (collection.state === "empty") {
         // load data from GS
@@ -104,9 +105,9 @@ export const prepareSelectedCollectios = createAsyncThunk(
       await thunkApi.dispatch(saveCollections());
     }
     // build words cache
-    thunkApi.dispatch(setPreparationState("ready"));
     thunkApi.dispatch(cacheWords());
     thunkApi.dispatch(updateQuiz());
+    thunkApi.dispatch(setPreparationState("ready"));
   }
 );
 
@@ -188,9 +189,11 @@ export const collectionsSlice = createSlice({
       state.collections = action.payload;
     },
     cacheWords: (state) => {
-      const wordsToCache = state.collections.reduce((acc, { words }) => {
-        return acc.concat(words ?? []);
-      }, [] as TranslatedPair[]);
+      const wordsToCache = state.collections
+        .filter(({ isSelected }) => isSelected)
+        .reduce((acc, { words }) => {
+          return acc.concat(words ?? []);
+        }, [] as TranslatedPair[]);
       state.cachedWords = wordsToCache;
     },
     updateQuiz: (state) => {
@@ -378,10 +381,16 @@ export const selectQuizData = createSelector(
       }
     }
 
+    const fakes = fakeOptions.map((index) => cachedWords[index].translation);
+    fakes.forEach((value, index) => {
+      const newIndex = Math.floor(Math.random() * fakes.length);
+      fakes[index] = fakes[newIndex];
+      fakes[newIndex] = value;
+    });
     const ret: QuizData = {
       quest: cachedWords[showIndex].orig,
       answer: cachedWords[showIndex].translation,
-      fakes: fakeOptions.map((index) => cachedWords[index].translation),
+      fakes,
     };
 
     return ret;

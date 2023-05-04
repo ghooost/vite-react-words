@@ -5,10 +5,12 @@ import {
   selectCollectionDataById,
 } from "@store/collectionsSlice";
 import { useAppDispatch } from "@store/index";
-import { useCallback } from "react";
+import { useCallback, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { Form, useLoaderData, useSubmit } from "react-router-dom";
 import styles from "./styles.module.css";
+
+import { Icon } from "@components/Icon";
 
 export const CollectionEdit = function () {
   const dispatch = useAppDispatch();
@@ -58,12 +60,13 @@ export const CollectionEdit = function () {
         <label className={styles.field}>
           <div className={styles.label}>Selected</div>
           <input
-            key={`isSelected${collectionId}`}
-            name="isSelected"
             type="checkbox"
-            value="1"
+            name="isSelected"
+            key={`isSelected${collectionId}`}
             defaultChecked={data?.isSelected}
+            className={styles.hiddenCheckbox}
           />
+          <Icon type="star" className={styles.star}></Icon>
         </label>
         <label className={styles.field}>
           <div className={styles.label}>Words</div>
@@ -87,9 +90,7 @@ export const CollectionEdit = function () {
           )}
           {data?.state !== "loading" && (
             <div className={styles.subfield}>
-              <a className={styles.service} onClick={handleReload}>
-                Reload
-              </a>
+              <a onClick={handleReload}>Reload</a>
             </div>
           )}
         </label>

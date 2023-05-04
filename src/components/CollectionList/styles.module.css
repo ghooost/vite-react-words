@@ -3,25 +3,58 @@
 }
 
 .item {
-  padding: 0.5em 1em;
-  display: block;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
   text-decoration: none;
-  color: black;
+  color: var(--color);
   overflow: hidden;
   text-overflow: ellipsis;
-  opacity: 0.5;
+  padding: 4px 0;
 }
 
 .active {
-  color: white;
-  background-color: black;
+  color: var(--color-contrast);
+  background-color: var(--color);
 }
 
 .pending {
-  color: white;
-  background-color: blue;
+  opacity: 0.5;
 }
 
 .selected {
   opacity: 1;
+}
+
+.ico {
+  margin: 8px;
+  width: 16px;
+  height: 16px;
+  fill: var(--color-contrast);
+  stroke: var(--color);
+  flex: 0 0 16px;
+}
+
+.active .ico {
+  stroke: var(--color-contrast);
+  fill: var(--color);
+}
+
+.selected .ico {
+  fill: var(--color);
+}
+
+.selected.active .ico {
+  fill: var(--color-contrast);
+  stroke: var(--color-contrast);
+}
+
+.name {
+  display: block;
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 150px;
 }

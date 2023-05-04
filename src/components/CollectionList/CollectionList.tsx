@@ -1,8 +1,11 @@
 import { NavLink } from "react-router-dom";
 
-import styles from "./styles.module.css";
 import { useSelector } from "react-redux";
 import { selectAllCollections } from "@store/collectionsSlice";
+
+import styles from "./styles.module.css";
+import { ReactComponent as StarIco } from "./assets/star.svg";
+import { Icon } from "@components/Icon";
 
 const getClassName =
   (isSelected: boolean) =>
@@ -21,7 +24,8 @@ export const CollectionList = function () {
     <nav className={styles.root}>
       {collections.map(({ id, name, isSelected }) => (
         <NavLink key={id} to={id} className={getClassName(isSelected)}>
-          {name || "No name"}
+          <Icon type="star" className={styles.ico} />
+          <span className={styles.name}>{name || "No name"}</span>
         </NavLink>
       ))}
     </nav>

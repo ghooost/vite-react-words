@@ -29,3 +29,18 @@
 a.service {
   text-decoration: underline;
 }
+
+.hiddenCheckbox {
+  display: none;
+}
+
+.star {
+  width: 16px;
+  height: 16px;
+  fill: var(--color-contrast);
+  stroke: var(--color);
+}
+
+.hiddenCheckbox:checked ~ .star {
+  fill: var(--color);
+}
