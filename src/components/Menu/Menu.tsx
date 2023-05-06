@@ -20,7 +20,7 @@ export const Menu = function () {
   return (
     <nav className={styles.root}>
       <NavLink to={Base} end className={getClassName}>
-        Home
+        Quiz
       </NavLink>
       <NavLink to={`${Base}setup`} className={getClassName}>
         Setup

@@ -10,7 +10,10 @@ import { useSelector } from "react-redux";
 import { Form, useLoaderData, useSubmit } from "react-router-dom";
 import styles from "./styles.module.css";
 
-import { Icon } from "@components/Icon";
+import { TextInput } from "@components/TextInput";
+import { IconCheckbox } from "@components/IconCheckbox";
+import { WordsList } from "@components/WordsList";
+import { FieldBlock } from "@components/FieldBlock";
 
 export const CollectionEdit = function () {
   const dispatch = useAppDispatch();
@@ -29,79 +32,48 @@ export const CollectionEdit = function () {
   }, [submit]);
 
   const numberOfWords = data?.words?.length ?? 0;
-  const topWords = data?.words
-    ?.slice(0, 5)
-    .map(({ orig }) => orig)
-    .join(", ");
+  const topWords = data?.words?.slice(0, 5).map(({ orig }) => orig);
 
   return (
     <div className={styles.root}>
       <Form method="post">
-        <label className={styles.field}>
-          <div className={styles.label}>Name</div>
-          <input
-            className={styles.input}
-            key={`name${collectionId}`}
-            name="name"
-            type="text"
-            defaultValue={data?.name}
-          />
-        </label>
-        <label className={styles.field}>
-          <div className={styles.label}>Sheet Id</div>
-          <input
-            className={styles.input}
-            key={`sheetId${collectionId}`}
-            name="sheetId"
-            type="text"
-            defaultValue={data?.sheetId}
-          />
-        </label>
-        <label className={styles.field}>
-          <div className={styles.label}>Selected</div>
-          <input
-            type="checkbox"
-            name="isSelected"
-            key={`isSelected${collectionId}`}
-            defaultChecked={data?.isSelected}
-            className={styles.hiddenCheckbox}
-          />
-          <Icon type="star" className={styles.star}></Icon>
-        </label>
-        <label className={styles.field}>
-          <div className={styles.label}>Words</div>
-          {data?.state === "ready" && numberOfWords > 5 && (
-            <div className={styles.subfield}>
-              {`${topWords}... (${numberOfWords} words loaded)`}
-            </div>
-          )}
-          {data?.state === "ready" &&
-            numberOfWords < 5 &&
-            numberOfWords > 0 && (
-              <div className={styles.subfield}>
-                {`${topWords} (${numberOfWords} words loaded)`}
-              </div>
-            )}
-          {data?.state === "ready" && numberOfWords === 0 && (
-            <div className={styles.subfield}>No words loaded</div>
-          )}
-          {data?.state === "loading" && (
-            <div className={styles.subfield}>Loading...</div>
-          )}
-          {data?.state !== "loading" && (
-            <div className={styles.subfield}>
-              <a onClick={handleReload}>Reload</a>
-            </div>
-          )}
-        </label>
-        <div className={styles.field}>
-          <button className={styles.service} type="submit">
-            Update
-          </button>
-          <a className={styles.service} onClick={handleDelete}>
-            Delete
-          </a>
-        </div>
+        <TextInput
+          key={`name${collectionId}`}
+          name="name"
+          label="Name"
+          defaultValue={data?.name}
+        />
+        <TextInput
+          key={`sheetId${collectionId}`}
+          name="sheetId"
+          label="Sheet Id"
+          defaultValue={data?.sheetId}
+        />
+        <IconCheckbox
+          label="Use in quiz"
+          ico="star"
+          name="isSelected"
+          key={`isSelected${collectionId}`}
+          defaultChecked={data?.isSelected}
+        />
+        <WordsList
+          label="Words"
+          linkText="Reload"
+          totalNum={numberOfWords}
+          words={topWords}
+          isLoading={data?.state === "loading"}
+          onClick={handleReload}
+        />
+        <FieldBlock>
+          <>
+            <button className={styles.service} type="submit">
+              Update
+            </button>
+            <a className={styles.service} onClick={handleDelete}>
+              Delete
+            </a>
+          </>
+        </FieldBlock>
       </Form>
     </div>
   );

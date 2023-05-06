@@ -27,7 +27,7 @@
 }
 
 a.service {
-  text-decoration: underline;
+  color: var(--link-text);
 }
 
 .hiddenCheckbox {
@@ -37,10 +37,10 @@ a.service {
 .star {
   width: 16px;
   height: 16px;
-  fill: var(--color-contrast);
-  stroke: var(--color);
+  fill: var(--canvas);
+  stroke: var(--link-text);
 }
 
 .hiddenCheckbox:checked ~ .star {
-  fill: var(--color);
+  fill: var(--link-text);
 }

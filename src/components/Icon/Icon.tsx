@@ -1,4 +1,3 @@
-import { useCallback } from "react";
 import { ReactComponent as StarIco } from "./assets/star.svg";
 import { ReactComponent as ReloadIco } from "./assets/reload.svg";
 const ValidIconTypes = {
@@ -6,18 +5,27 @@ const ValidIconTypes = {
   reload: ReloadIco,
 };
 
-interface IconProps {
+export interface IconProps {
   type: keyof typeof ValidIconTypes;
+  isEmpty?: boolean;
   className?: string;
   onClick?: () => void;
 }
 
-export const Icon = function ({ type, className, onClick }: IconProps) {
+export const Icon = function ({
+  type,
+  isEmpty,
+  className,
+  onClick,
+}: IconProps) {
   const Ico = ValidIconTypes[type];
-  const handleClick = useCallback(() => {
-    if (onClick) {
-      onClick();
-    }
-  }, [onClick]);
-  return <Ico className={className} onClick={handleClick} />;
+  const props: Record<string, boolean | string | typeof onClick> = {};
+  const styles = { fill: isEmpty ? "currentColor" : "" };
+  if (className !== undefined) {
+    props.className = className;
+  }
+  if (onClick !== undefined) {
+    props.onClick = onClick;
+  }
+  return <Ico {...props} style={styles} />;
 };

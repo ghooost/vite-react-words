@@ -1,0 +1,41 @@
+.root {
+  display: flex;
+  margin-bottom: var(--field-margin-bottom, 20px);
+  border: var(--button-border);
+  border-radius: var(--border-radius);
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 2px;
+  box-shadow: var(--button-shadow);
+}
+
+.label {
+  flex: 0 1 auto;
+  overflow: hidden;
+  max-width: 50%;
+  padding: 4px 8px;
+  font-family: var(--main-font-family);
+  font-size: var(--main-font-size);
+  font-weight: bold;
+  max-width: 50%;
+}
+
+.field {
+  flex: 1;
+  margin-right: 4px;
+}
+
+.input {
+  border: none;
+  color: var(--field-text, FieldText);
+  background-color: var(--field, FieldText);
+  font-family: var(--main-font-family);
+  font-size: var(--main-font-size);
+  padding: 4px 8px;
+
+  margin: 0;
+  box-sizing: border-box;
+  width: 100%;
+}

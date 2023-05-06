@@ -1,0 +1,43 @@
+.root {
+  display: flex;
+  margin-bottom: var(--field-margin-bottom, 20px);
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 2px;
+}
+
+.label {
+  flex: 0 1 auto;
+  overflow: hidden;
+  max-width: 50%;
+  padding: 4px 8px;
+  font-family: var(--main-font-family);
+  font-size: var(--main-font-size);
+  font-weight: bold;
+  max-width: 50%;
+}
+
+.field {
+  flex: 0 1 auto;
+  border: none;
+  color: var(--link-text, LinkText);
+  padding: 4px 8px;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.hiddenCheckbox {
+  display: none;
+}
+
+.icon {
+  stroke: currentColor;
+  fill: none;
+  cursor: pointer;
+}
+
+.hiddenCheckbox:checked ~ .icon {
+  fill: currentColor;
+}

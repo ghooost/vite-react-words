@@ -8,15 +8,15 @@
   align-items: center;
   justify-content: flex-start;
   text-decoration: none;
-  color: var(--color);
+  color: var(--canvas-text);
   overflow: hidden;
   text-overflow: ellipsis;
   padding: 4px 0;
 }
 
 .active {
-  color: var(--color-contrast);
-  background-color: var(--color);
+  color: var(--highlight-text);
+  background-color: var(--highlight);
 }
 
 .pending {
@@ -31,23 +31,23 @@
   margin: 8px;
   width: 16px;
   height: 16px;
-  fill: var(--color-contrast);
-  stroke: var(--color);
+  fill: var(--canvas);
+  stroke: var(--canvas-text);
   flex: 0 0 16px;
 }
 
 .active .ico {
-  stroke: var(--color-contrast);
-  fill: var(--color);
+  stroke: var(--highlight-text);
+  fill: var(--canvas);
 }
 
 .selected .ico {
-  fill: var(--color);
+  fill: var(--canvas-text);
 }
 
 .selected.active .ico {
-  fill: var(--color-contrast);
-  stroke: var(--color-contrast);
+  stroke: var(--highlight-text);
+  fill: var(--highlight-text);
 }
 
 .name {
@@ -56,5 +56,15 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: 150px;
+  padding-right: 8px;
+}
+
+.servicePanel {
+  padding: 1em 0;
+}
+
+.service {
+  padding: 4px 4px 4px 32px;
+  color: var(--link-text);
+  cursor: pointer;
 }

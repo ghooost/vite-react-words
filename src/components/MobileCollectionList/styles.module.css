@@ -1,0 +1,10 @@
+.root {
+  height: 100%;
+  overflow: auto;
+}
+
+@media (min-width: 800px) {
+  .root {
+    display: none;
+  }
+}

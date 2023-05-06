@@ -7,23 +7,17 @@
 }
 
 .menu {
-  border-right: 1px solid black;
-  flex: 0 0 150px;
+  border-right: var(--button-border);
+  flex: 0 0 auto;
+  width: 20%;
+}
+
+@media (max-width: 800px) {
+  .menu {
+    display: none;
+  }
 }
 
 .main {
   flex: 1 1 auto;
-}
-
-.serviceHolder {
-  padding: 1.5em 1em;
-  display: block;
-  text-decoration: none;
-  background-color: silver;
-}
-
-.service {
-  text-decoration: underline;
-  color: black;
-  cursor: pointer;
 }

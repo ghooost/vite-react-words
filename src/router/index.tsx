@@ -20,6 +20,7 @@ import {
   updateCollectionById,
 } from "@store/collectionsSlice";
 import { Base } from "@router/contants";
+import { MobileCollectionList } from "@components/MobileCollectionList";
 
 // loaders
 export const rootLoader = async () => {
@@ -36,7 +37,7 @@ export const collectionLoader = async ({ params }: LoaderFunctionArgs) => {
 export const actionCreate = async () => {
   // load data from storage
   const action = await store.dispatch(createNewCollection());
-  return redirect(action.payload as string);
+  return redirect(`${Base}setup/${action.payload}`);
 };
 
 export const actionDelete = async ({ params }: ActionFunctionArgs) => {
@@ -53,6 +54,8 @@ export const actionDelete = async ({ params }: ActionFunctionArgs) => {
 };
 
 export const actionUpdate = async ({ request, params }: ActionFunctionArgs) => {
+  console.log(request.method);
+
   const { name, sheetId, isSelected } = Object.fromEntries(
     await request.formData()
   );
@@ -80,7 +83,9 @@ export const router = createBrowserRouter(
       loader={rootLoader}
     >
       <Route index element={<Home />} />
-      <Route path={"setup"} element={<Setup />} action={actionCreate}>
+      <Route path={"setup"} element={<Setup />}>
+        <Route index element={<MobileCollectionList />} />
+        <Route path="create" action={actionCreate}></Route>
         <Route
           path={":collectionId"}
           loader={collectionLoader}

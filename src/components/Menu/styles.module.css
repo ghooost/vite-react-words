@@ -1,26 +1,29 @@
 .root {
-  flex: 1 1 auto;
+  height: 50px;
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: stretch;
   justify-content: flex-start;
-  border-bottom: 1px solid black;
+  border-bottom: var(--button-border);
+  background: var(--canvas);
+  z-index: 1;
 }
 
 .item {
-  padding: 1em;
+  padding: 0 1em;
   display: block;
   text-decoration: none;
-  color: black;
+  color: var(--link-text);
+  line-height: 50px;
 }
 
 .active {
-  color: white;
-  background-color: black;
+  color: var(--highlight-text);
+  background-color: var(--highlight);
 }
 
 .pending {
-  color: white;
-  background-color: black;
+  color: var(--highlight-text);
+  background-color: var(--highlight);
   opacity: 0.5;
 }
