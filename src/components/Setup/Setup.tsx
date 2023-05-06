@@ -1,5 +1,4 @@
-import { useCallback } from "react";
-import { Outlet, useSubmit } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { CollectionList } from "@components/CollectionList";
 
 import styles from "./styles.module.css";
