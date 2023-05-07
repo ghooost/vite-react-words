@@ -1,3 +1,10 @@
+import {
+  ChangeEvent,
+  DetailedHTMLProps,
+  InputHTMLAttributes,
+  useEffect,
+  useRef,
+} from "react";
 import styles from "./styles.module.css";
 
 interface Props {
@@ -7,6 +14,7 @@ interface Props {
   className?: string;
   defaultValue?: string;
   value?: string;
+  autofocus?: boolean;
   onChange?: (value: string) => void;
 }
 
@@ -17,11 +25,16 @@ export const TextInput = function ({
   className,
   defaultValue,
   value,
+  autofocus,
   onChange,
 }: Props) {
   const rootClass = [styles.root, className ?? ""].join(" ");
 
-  const inputProps: Record<string, string | typeof onChange> = {};
+  const inputProps: DetailedHTMLProps<
+    InputHTMLAttributes<HTMLInputElement>,
+    HTMLInputElement
+  > = {};
+
   if (name !== undefined) {
     inputProps.name = name;
   }
@@ -35,14 +48,22 @@ export const TextInput = function ({
     inputProps.value = value;
   }
   if (onChange !== undefined) {
-    inputProps.onChange = onChange;
+    inputProps.onChange = (event: ChangeEvent) =>
+      onChange(event.target.textContent ?? "");
   }
+
+  const ref = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    if (autofocus) {
+      ref.current?.focus();
+    }
+  }, [autofocus]);
 
   return (
     <label className={rootClass}>
       {label && <span className={styles.label}>{label}:</span>}
       <span className={styles.field}>
-        <input type="text" className={styles.input} {...inputProps} />
+        <input type="text" ref={ref} className={styles.input} {...inputProps} />
       </span>
     </label>
   );

@@ -61,10 +61,17 @@ export const actionUpdate = async ({ request, params }: ActionFunctionArgs) => {
   if (!collectionId) {
     return;
   }
+  let parsedSheetId = sheetId.toString();
+  const match = /docs\.google\.com\/spreadsheets\/d\/([^/]+)/i.exec(
+    parsedSheetId
+  );
+  if (match?.[1]) {
+    parsedSheetId = match[1];
+  }
   await store.dispatch(
     updateCollectionById({
       id: collectionId,
-      sheetId: sheetId.toString(),
+      sheetId: parsedSheetId,
       name: name.toString(),
       isSelected: isSelected !== undefined,
     })

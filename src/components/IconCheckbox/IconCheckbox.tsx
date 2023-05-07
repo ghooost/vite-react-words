@@ -30,9 +30,6 @@ export const IconCheckbox = function ({
   if (name !== undefined) {
     inputProps.name = name;
   }
-  // if (key !== undefined) {
-  //   inputProps.key = key;
-  // }
   if (id !== undefined) {
     inputProps.id = id;
   }

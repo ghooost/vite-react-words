@@ -16,6 +16,7 @@ import { IconCheckbox } from "@components/IconCheckbox";
 import { WordsList } from "@components/WordsList";
 import { FieldBlock } from "@components/FieldBlock";
 import { StatisticField } from "@components/StatisticField";
+import { Button } from "@components/Button";
 
 export const CollectionEdit = function () {
   const dispatch = useAppDispatch();
@@ -45,6 +46,7 @@ export const CollectionEdit = function () {
     <div className={styles.root}>
       <Form method="post">
         <TextInput
+          autofocus
           key={`name${collectionId}`}
           name="name"
           label="Name"
@@ -80,9 +82,7 @@ export const CollectionEdit = function () {
         />
         <FieldBlock>
           <>
-            <button className={styles.service} type="submit">
-              Update
-            </button>
+            <Button type="submit">Update</Button>
             <a className={styles.service} onClick={handleDelete}>
               Delete
             </a>
