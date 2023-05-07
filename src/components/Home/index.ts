@@ -1,1 +1,1 @@
-export * from "./Home";
+export { HomeConnected as Home } from "./containers/HomeConnected";

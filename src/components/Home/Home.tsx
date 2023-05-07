@@ -1,50 +1,30 @@
-import { useCallback, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { useAppDispatch } from "@store/index";
-import {
-  prepareSelectedCollectios,
-  processAnswer,
-  selectCollectionsPreparationState,
-  selectQuizData,
-} from "@store/collectionsSlice";
+import { QuizData, Collection } from "@store/collectionsSlice";
 
 import styles from "./styles.module.css";
 
-export const Home = function () {
-  const dispatch = useAppDispatch();
-  const preparationState = useSelector(selectCollectionsPreparationState);
-  const quizData = useSelector(selectQuizData);
+interface Props {
+  preparationState: Collection["state"];
+  data: QuizData | null;
+  onClick: (word: string) => void;
+}
 
-  useEffect(() => {
-    dispatch(prepareSelectedCollectios());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const handleClick = useCallback(
-    (answer: string) => {
-      dispatch(processAnswer({ quest: quizData?.quest ?? "", answer }));
-    },
-    [quizData, dispatch]
-  );
-
+export const Home = function ({ preparationState, data, onClick }: Props) {
   if (preparationState !== "ready") {
     return null;
   }
 
-  if (quizData === null) {
+  if (data === null) {
     return null;
   }
 
+  const { quest, fakes } = data;
+
   return (
     <div className={styles.root}>
-      <div className={styles.quest}>{quizData.quest}</div>
+      <div className={styles.quest}>{quest}</div>
       <div className={styles.answers}>
-        {quizData.fakes.map((word) => (
-          <a
-            key={word}
-            className={styles.answer}
-            onClick={() => handleClick(word)}
-          >
+        {fakes.map((word) => (
+          <a key={word} className={styles.answer} onClick={() => onClick(word)}>
             {word}
           </a>
         ))}

@@ -1,9 +1,7 @@
-import { NavLink, useSubmit } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
-import { useSelector } from "react-redux";
-import { selectAllCollections } from "@store/collectionsSlice";
+import { Collection } from "@store/collectionsSlice";
 import { Icon } from "@components/Icon";
-import { useCallback } from "react";
 
 import styles from "./styles.module.css";
 
@@ -17,17 +15,16 @@ const getClassName =
       isSelected ? styles.selected : "",
     ].join(" ");
 
-export const CollectionList = function () {
-  const collections = useSelector(selectAllCollections);
-  const submit = useSubmit();
-  const handleCreate = useCallback(() => {
-    submit(null, { method: "post", action: "create" });
-  }, [submit]);
+interface Props {
+  collections: Collection[];
+  onCreate: () => void;
+}
 
+export const CollectionList = function ({ collections, onCreate }: Props) {
   return (
     <nav className={styles.root}>
       <div className={styles.servicePanel}>
-        <a className={styles.service} onClick={handleCreate}>
+        <a className={styles.service} onClick={onCreate}>
           New connection
         </a>
       </div>

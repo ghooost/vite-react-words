@@ -1,12 +1,13 @@
-import { Outlet } from "react-router-dom";
 import { Menu } from "@components/Menu";
-import { useSelector } from "react-redux";
-
+import { Collection } from "@store/collectionsSlice";
 import styles from "./styles.module.css";
-import { selectCollectionsState } from "@store/collectionsSlice";
 
-export const Page = function () {
-  const loadingState = useSelector(selectCollectionsState);
+interface Props {
+  loadingState: Collection["state"];
+  children: JSX.Element | string;
+}
+
+export const Page = function ({ loadingState, children }: Props) {
   if (loadingState !== "ready") {
     return <div className={styles.loader}></div>;
   }
@@ -16,9 +17,7 @@ export const Page = function () {
       <header className={styles.header}>
         <Menu />
       </header>
-      <main className={styles.main}>
-        <Outlet />
-      </main>
+      <main className={styles.main}>{children}</main>
     </>
   );
 };

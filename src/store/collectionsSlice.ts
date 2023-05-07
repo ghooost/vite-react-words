@@ -25,7 +25,7 @@ export interface Collection {
   wrongAnswers?: number;
 }
 
-interface QuizData {
+export interface QuizData {
   quest: string;
   answer: string;
   fakes: string[];

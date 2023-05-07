@@ -1,1 +1,1 @@
-export * from "./CollectionEdit";
+export { CollectionEditConnected as CollectionEdit } from "./containers/CollectionEditConnected";
