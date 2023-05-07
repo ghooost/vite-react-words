@@ -13,8 +13,13 @@ Words and translations are initially stored in Google Sheets documents and impor
 - Create a Google Sheets document
 - Fill it with words (cells in column A) and translations (cells in column B)
 - Allow anyone to view the document
-- Add the collection with the ID of your document
+- Add the collection with the ID of your document (you can just paste URL to your sheet to Sheet Id field)
 - Mark the collection with a star
+
+# Example Google Sheets
+
+- [Finnish Numbers](https://docs.google.com/spreadsheets/d/1jBgmXRnafIlAe4zAgZRAGdkBJw-ySHRfza5FPH4HNII/edit#gid=0)
+- [Finnish times](https://docs.google.com/spreadsheets/d/19URjKxbfUYtexfvENRGP8M1c-zKecPD2SfZBOpnHE0Q/edit#gid=0)
 
 # Collections with stars
 
