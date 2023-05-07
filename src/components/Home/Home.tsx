@@ -3,9 +3,9 @@ import { useSelector } from "react-redux";
 import { useAppDispatch } from "@store/index";
 import {
   prepareSelectedCollectios,
+  processAnswer,
   selectCollectionsPreparationState,
   selectQuizData,
-  updateQuiz,
 } from "@store/collectionsSlice";
 
 import styles from "./styles.module.css";
@@ -17,13 +17,12 @@ export const Home = function () {
 
   useEffect(() => {
     dispatch(prepareSelectedCollectios());
-  }, [dispatch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleClick = useCallback(
-    (word: string) => {
-      if (word === quizData?.answer) {
-        dispatch(updateQuiz());
-      }
+    (answer: string) => {
+      dispatch(processAnswer({ quest: quizData?.quest ?? "", answer }));
     },
     [quizData, dispatch]
   );

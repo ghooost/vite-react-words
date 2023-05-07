@@ -10,6 +10,8 @@ import {
   loadTranslatedPairsFromGoogleSheet,
 } from "@api/googleSheet";
 
+const numberOfAnswers = 5;
+
 type State = "empty" | "loading" | "saving" | "ready";
 
 export interface Collection {
@@ -19,6 +21,14 @@ export interface Collection {
   state: State;
   name: string;
   words?: TranslatedPair[];
+  okAnswers?: number;
+  wrongAnswers?: number;
+}
+
+interface QuizData {
+  quest: string;
+  answer: string;
+  fakes: string[];
 }
 
 export interface CollectionsState {
@@ -27,6 +37,7 @@ export interface CollectionsState {
   collections: Collection[];
   cachedWords: TranslatedPair[];
   cachedIndexes: number[];
+  currentQuizData?: QuizData;
 }
 
 const initialState: CollectionsState = {
@@ -175,6 +186,24 @@ export const updateCollectionById = createAsyncThunk(
   }
 );
 
+interface ProcessAnswerPayload {
+  quest: string;
+  answer: string;
+}
+
+export const processAnswer = createAsyncThunk(
+  "collections/processAnswer",
+  async ({ quest, answer }: ProcessAnswerPayload, thunkApi) => {
+    const state = thunkApi.getState();
+    const isOk = selectAnswerIsOk(state, quest, answer);
+    thunkApi.dispatch(logAnswer({ quest, isOk }));
+    await thunkApi.dispatch(saveCollections());
+    if (isOk) {
+      thunkApi.dispatch(updateQuiz());
+    }
+  }
+);
+
 export const collectionsSlice = createSlice({
   name: "collections",
   initialState,
@@ -196,22 +225,65 @@ export const collectionsSlice = createSlice({
         }, [] as TranslatedPair[]);
       state.cachedWords = wordsToCache;
     },
+    logAnswer: (
+      state,
+      action: PayloadAction<{ quest: string; isOk: boolean }>
+    ) => {
+      const { quest, isOk } = action.payload;
+      const collections = state.collections.filter(
+        ({ isSelected, words }) =>
+          isSelected &&
+          words?.find(
+            ({ orig, translation }) => orig === quest || translation === quest
+          )
+      );
+
+      const fieldToUpdate = isOk ? "okAnswers" : "wrongAnswers";
+      const updater = (collection: Collection) =>
+        (collection[fieldToUpdate] = (collection[fieldToUpdate] ?? 0) + 1);
+      collections.forEach(updater);
+    },
     updateQuiz: (state) => {
+      const cachedWords = state.cachedWords;
       const indexes = state.cachedIndexes.slice(1);
-      if (indexes.length > 0) {
+      if (indexes.length === 0) {
+        const cachedIndexes = cachedWords.map((_, index) => index);
+        cachedIndexes.forEach((item, index) => {
+          const pairIndex = Math.floor(cachedIndexes.length * Math.random());
+          cachedIndexes[index] = cachedIndexes[pairIndex];
+          cachedIndexes[pairIndex] = item;
+        });
+        state.cachedIndexes = cachedIndexes;
+      } else {
         state.cachedIndexes = indexes;
-        return;
       }
-      const cachedIndexes = state.cachedWords.map((_, index) => index);
-      cachedIndexes.forEach((item, index) => {
-        const pairIndex = Math.floor(cachedIndexes.length * Math.random());
-        cachedIndexes[index] = cachedIndexes[pairIndex];
-        cachedIndexes[pairIndex] = item;
+
+      const showIndex = state.cachedIndexes[0];
+      const fakeOptions = [showIndex];
+
+      while (
+        fakeOptions.length < numberOfAnswers &&
+        fakeOptions.length < cachedWords.length
+      ) {
+        const index = Math.floor(Math.random() * cachedWords.length);
+        if (!fakeOptions.includes(index)) {
+          fakeOptions.push(index);
+        }
+      }
+
+      const fakes = fakeOptions.map((index) => cachedWords[index].translation);
+      fakes.forEach((value, index) => {
+        const newIndex = Math.floor(Math.random() * fakes.length);
+        fakes[index] = fakes[newIndex];
+        fakes[newIndex] = value;
       });
-      state.cachedIndexes = cachedIndexes;
+      state.currentQuizData = {
+        quest: cachedWords[showIndex].orig,
+        answer: cachedWords[showIndex].translation,
+        fakes,
+      };
     },
     createCollection: (state, action: PayloadAction<string>) => {
-      console.log("create collection?");
       state.collections = [
         {
           id: action.payload,
@@ -227,8 +299,6 @@ export const collectionsSlice = createSlice({
       state.collections = state.collections.filter(
         ({ id: itemId }) => itemId !== action.payload
       );
-      console.log("remove", action.payload);
-      console.log(state.collections);
     },
     updateCollection: (
       state,
@@ -241,6 +311,8 @@ export const collectionsSlice = createSlice({
         sheetId,
         words,
         name,
+        okAnswers,
+        wrongAnswers,
       } = action.payload;
       if (!cId) {
         return;
@@ -268,6 +340,12 @@ export const collectionsSlice = createSlice({
       if (words !== undefined) {
         item.words = words;
       }
+      if (okAnswers !== undefined) {
+        item.okAnswers = okAnswers === 0 ? undefined : okAnswers;
+      }
+      if (wrongAnswers !== undefined) {
+        item.wrongAnswers = wrongAnswers === 0 ? undefined : wrongAnswers;
+      }
     },
   },
   extraReducers: (builder) => {
@@ -280,15 +358,6 @@ export const collectionsSlice = createSlice({
     });
     builder.addCase(loadCollections.rejected, (state) => {
       state.state = "empty";
-    });
-    builder.addCase(saveCollections.fulfilled, (state) => {
-      state.state = "ready";
-    });
-    builder.addCase(saveCollections.pending, (state) => {
-      state.state = "saving";
-    });
-    builder.addCase(saveCollections.rejected, (state) => {
-      state.state = "ready";
     });
   },
 });
@@ -303,6 +372,7 @@ export const {
   setPreparationState,
   createCollection,
   removeCollection,
+  logAnswer,
 } = collectionsSlice.actions;
 
 // selectors
@@ -350,15 +420,9 @@ export const selectCollectionIdAfterDeletion = createSelector(
   }
 );
 
-interface QuizData {
-  quest: string;
-  answer: string;
-  fakes: string[];
-}
-
 export const selectQuizData = createSelector(
   selectCollections,
-  ({ preparationState, cachedWords, cachedIndexes }) => {
+  ({ currentQuizData, preparationState, cachedWords, cachedIndexes }) => {
     if (preparationState !== "ready") {
       return null;
     }
@@ -371,29 +435,18 @@ export const selectQuizData = createSelector(
       return null;
     }
 
-    const showIndex = cachedIndexes[0];
-    const fakeOptions = [showIndex];
+    return currentQuizData ?? null;
+  }
+);
 
-    while (fakeOptions.length < 5 && fakeOptions.length < cachedWords.length) {
-      const index = Math.floor(Math.random() * cachedWords.length);
-      if (!fakeOptions.includes(index)) {
-        fakeOptions.push(index);
-      }
-    }
-
-    const fakes = fakeOptions.map((index) => cachedWords[index].translation);
-    fakes.forEach((value, index) => {
-      const newIndex = Math.floor(Math.random() * fakes.length);
-      fakes[index] = fakes[newIndex];
-      fakes[newIndex] = value;
-    });
-    const ret: QuizData = {
-      quest: cachedWords[showIndex].orig,
-      answer: cachedWords[showIndex].translation,
-      fakes,
-    };
-
-    return ret;
+export const selectAnswerIsOk = createSelector(
+  [selectCollections, (_, quest: string, answer: string) => [quest, answer]],
+  ({ cachedWords }, [quest, answer]) => {
+    return !!cachedWords.find(
+      ({ orig, translation }) =>
+        (orig === quest && answer === translation) ||
+        (orig === translation && answer === orig)
+    );
   }
 );
 

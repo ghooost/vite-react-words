@@ -3,6 +3,7 @@
 import {
   loadCollectionData,
   selectCollectionDataById,
+  updateCollection,
 } from "@store/collectionsSlice";
 import { useAppDispatch } from "@store/index";
 import { useCallback } from "react";
@@ -14,6 +15,7 @@ import { TextInput } from "@components/TextInput";
 import { IconCheckbox } from "@components/IconCheckbox";
 import { WordsList } from "@components/WordsList";
 import { FieldBlock } from "@components/FieldBlock";
+import { StatisticField } from "@components/StatisticField";
 
 export const CollectionEdit = function () {
   const dispatch = useAppDispatch();
@@ -34,6 +36,11 @@ export const CollectionEdit = function () {
   const numberOfWords = data?.words?.length ?? 0;
   const topWords = data?.words?.slice(0, 5).map(({ orig }) => orig);
 
+  const handleResetStat = useCallback(() => {
+    dispatch(
+      updateCollection({ id: collectionId, okAnswers: 0, wrongAnswers: 0 })
+    );
+  }, [collectionId, dispatch]);
   return (
     <div className={styles.root}>
       <Form method="post">
@@ -63,6 +70,13 @@ export const CollectionEdit = function () {
           words={topWords}
           isLoading={data?.state === "loading"}
           onClick={handleReload}
+        />
+        <StatisticField
+          label="Correct answers"
+          linkText="Reset"
+          okAnswers={data?.okAnswers}
+          wrongAnswers={data?.wrongAnswers}
+          onClick={handleResetStat}
         />
         <FieldBlock>
           <>

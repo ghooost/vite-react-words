@@ -54,8 +54,6 @@ export const actionDelete = async ({ params }: ActionFunctionArgs) => {
 };
 
 export const actionUpdate = async ({ request, params }: ActionFunctionArgs) => {
-  console.log(request.method);
-
   const { name, sheetId, isSelected } = Object.fromEntries(
     await request.formData()
   );
