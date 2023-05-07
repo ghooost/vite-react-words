@@ -12,12 +12,6 @@
   width: 20%;
 }
 
-@media (max-width: 800px) {
-  .menu {
-    display: none;
-  }
-}
-
 .main {
   flex: 1 1 auto;
 }

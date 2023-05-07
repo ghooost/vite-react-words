@@ -19,12 +19,12 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
 
-    "baseUrl": "./src",
+    // "baseUrl": "./src",
     "paths": {
-      "@router/*": ["router/*"],
-      "@components/*": ["components/*"],
-      "@store/*": ["store/*"],
-      "@api/*": ["api/*"]
+      "@router/*": ["./src/router/*"],
+      "@components/*": ["./src/components/*"],
+      "@store/*": ["./src/store/*"],
+      "@api/*": ["./src/api/*"]
     }
     // "types": ["vite/client"]
   },

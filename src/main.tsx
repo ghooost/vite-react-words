@@ -3,14 +3,18 @@ import ReactDOM from "react-dom/client";
 import { store } from "./store";
 import { Provider } from "react-redux";
 
-import "./index.css";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./router";
+
+import "./index.css";
+import { IsMobile } from "@components/IsMobile";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>
-      <RouterProvider router={router} />
+      <IsMobile mobileWidth={800}>
+        <RouterProvider router={router} />
+      </IsMobile>
     </Provider>
   </React.StrictMode>
 );
