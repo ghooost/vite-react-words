@@ -11,6 +11,7 @@ interface Props {
   name?: string;
   id?: string;
   label?: string;
+  placeholder?: string;
   className?: string;
   defaultValue?: string;
   value?: string;
@@ -22,6 +23,7 @@ export const TextInput = function ({
   name,
   id,
   label,
+  placeholder,
   className,
   defaultValue,
   value,
@@ -46,6 +48,9 @@ export const TextInput = function ({
   }
   if (value !== undefined) {
     inputProps.value = value;
+  }
+  if (placeholder !== undefined) {
+    inputProps.placeholder = placeholder;
   }
   if (onChange !== undefined) {
     inputProps.onChange = (event: ChangeEvent) =>

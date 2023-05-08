@@ -54,24 +54,17 @@ export const actionDelete = async ({ params }: ActionFunctionArgs) => {
 };
 
 export const actionUpdate = async ({ request, params }: ActionFunctionArgs) => {
-  const { name, sheetId, isSelected } = Object.fromEntries(
+  const { name, url, isSelected } = Object.fromEntries(
     await request.formData()
   );
   const { collectionId } = params;
   if (!collectionId) {
     return;
   }
-  let parsedSheetId = sheetId.toString();
-  const match = /docs\.google\.com\/spreadsheets\/d\/([^/]+)/i.exec(
-    parsedSheetId
-  );
-  if (match?.[1]) {
-    parsedSheetId = match[1];
-  }
   await store.dispatch(
     updateCollectionById({
       id: collectionId,
-      sheetId: parsedSheetId,
+      url: url.toString(),
       name: name.toString(),
       isSelected: isSelected !== undefined,
     })

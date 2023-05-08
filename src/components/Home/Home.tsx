@@ -17,11 +17,14 @@ export const Home = function ({ preparationState, data, onClick }: Props) {
     return null;
   }
 
-  const { quest, fakes } = data;
+  const { quest, fakes, type, url } = data;
 
   return (
     <div className={styles.root}>
-      <div className={styles.quest}>{quest}</div>
+      <div className={styles.quest}>
+        {type === "word" && quest}
+        {type === "image" && <img src={url} className={styles.image} />}
+      </div>
       <div className={styles.answers}>
         {fakes.map((word) => (
           <a key={word} className={styles.answer} onClick={() => onClick(word)}>

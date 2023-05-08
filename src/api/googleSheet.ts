@@ -1,3 +1,5 @@
+import { TranslatedPair } from "@store/collectionsSlice";
+
 // GoogleSheet types
 interface GoogleSheetCell {
   v: string;
@@ -13,11 +15,6 @@ export interface GoogleSheetData {
   };
 }
 
-export interface TranslatedPair {
-  orig: string;
-  translation: string;
-}
-
 export const loadGoogleSheet = async (id: string) => {
   const url = `https://docs.google.com/spreadsheets/d/${id}/gviz/tq?tqx=out:json&sheet=&tq=select%20*`;
   try {
@@ -30,7 +27,13 @@ export const loadGoogleSheet = async (id: string) => {
   }
 };
 
-export const loadTranslatedPairsFromGoogleSheet = async (id: string) => {
+export const loadTranslatedPairsFromGoogleSheetWithUrl = async (
+  url?: string
+) => {
+  const id = parseGoogleSheetId(url);
+  if (!id) {
+    return [];
+  }
   const data = await loadGoogleSheet(id);
   if (data === null) {
     return [];
@@ -43,9 +46,25 @@ export const loadTranslatedPairsFromGoogleSheet = async (id: string) => {
       return acc;
     }
     acc.push({
+      type: "word",
       orig: cells[0].v,
       translation: cells[1].v,
     });
     return acc;
   }, [] as TranslatedPair[]);
+};
+
+export const parseGoogleSheetId = (url?: string) => {
+  if (!url) {
+    return null;
+  }
+  const match = /docs\.google\.com\/spreadsheets\/d\/([^/]+)/i.exec(url);
+  if (!match?.[1]) {
+    return null;
+  }
+  return match[1].toString();
+};
+
+export const isGoogleSheetUrl = (url?: string) => {
+  return parseGoogleSheetId(url) !== null;
 };

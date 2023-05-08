@@ -6,26 +6,38 @@ import {
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from ".";
 import {
-  TranslatedPair,
-  loadTranslatedPairsFromGoogleSheet,
+  isGoogleSheetUrl,
+  loadTranslatedPairsFromGoogleSheetWithUrl,
 } from "@api/googleSheet";
+import {
+  isFlickrPhotoSetUrl,
+  loadTranslatedPairsFromFlickrWithUrl,
+} from "@api/flickr";
 
 const numberOfAnswers = 5;
 
-type State = "empty" | "loading" | "saving" | "ready";
+export type TranslatedPair = {
+  type: "image" | "word";
+  url?: string;
+  orig: string;
+  translation: string;
+};
 
+type State = "empty" | "loading" | "saving" | "ready";
 export interface Collection {
   id: string;
   isSelected: boolean;
-  sheetId: string;
+  url?: string;
   state: State;
   name: string;
-  words?: TranslatedPair[];
+  words?: TranslatedPair[] | null;
   okAnswers?: number;
   wrongAnswers?: number;
 }
 
 export interface QuizData {
+  type: TranslatedPair["type"];
+  url?: string;
   quest: string;
   answer: string;
   fakes: string[];
@@ -53,7 +65,14 @@ const defaultCollections: Collection[] = [
     id: "def1",
     isSelected: true,
     name: "Suomi numbers",
-    sheetId: "1jBgmXRnafIlAe4zAgZRAGdkBJw-ySHRfza5FPH4HNII",
+    url: "https://docs.google.com/spreadsheets/d/1jBgmXRnafIlAe4zAgZRAGdkBJw-ySHRfza5FPH4HNII/edit#gid=0",
+    state: "empty",
+  },
+  {
+    id: "def2",
+    isSelected: false,
+    name: "Flickr images",
+    url: "https://www.flickr.com/photos/198281950@N04/sets/72177720308121319/",
     state: "empty",
   },
 ];
@@ -84,6 +103,16 @@ export const saveCollections = createAsyncThunk(
   }
 );
 
+const loadCollection = async (collection: Collection) => {
+  if (isGoogleSheetUrl(collection.url)) {
+    return await loadTranslatedPairsFromGoogleSheetWithUrl(collection.url);
+  }
+  if (isFlickrPhotoSetUrl(collection.url)) {
+    return await loadTranslatedPairsFromFlickrWithUrl(collection.url);
+  }
+  return null;
+};
+
 export const prepareSelectedCollectios = createAsyncThunk(
   "collections/prepareSelectedCollectios",
   async (_, thunkApi) => {
@@ -99,9 +128,7 @@ export const prepareSelectedCollectios = createAsyncThunk(
     for (const collection of collections) {
       if (collection.state === "empty") {
         // load data from GS
-        const words = await loadTranslatedPairsFromGoogleSheet(
-          collection.sheetId
-        );
+        const words = await loadCollection(collection);
         thunkApi.dispatch(
           updateCollection({
             id: collection.id,
@@ -133,10 +160,10 @@ export const loadCollectionData = createAsyncThunk(
     );
     const state = thunkApi.getState() as RootState;
     const collection = selectCollectionDataById(state, id);
-    if (!collection || !collection?.sheetId) {
+    if (!collection || !collection?.url) {
       return false;
     }
-    const words = await loadTranslatedPairsFromGoogleSheet(collection.sheetId);
+    const words = await loadCollection(collection);
     thunkApi.dispatch(
       updateCollection({
         id: collection.id,
@@ -171,14 +198,14 @@ export const removeCollectionById = createAsyncThunk(
 export const updateCollectionById = createAsyncThunk(
   "collections/updateCollectionById",
   async (
-    { name, id, sheetId, isSelected }: UpdateCollectionStatePayload,
+    { name, id, url, isSelected }: UpdateCollectionStatePayload,
     thunkApi
   ) => {
     thunkApi.dispatch(
       updateCollection({
         id,
         name,
-        sheetId,
+        url,
         isSelected,
       })
     );
@@ -195,10 +222,13 @@ export const processAnswer = createAsyncThunk(
   "collections/processAnswer",
   async ({ quest, answer }: ProcessAnswerPayload, thunkApi) => {
     const state = thunkApi.getState();
+    console.log("1:", quest, answer);
     const isOk = selectAnswerIsOk(state, quest, answer);
+    console.log("2:", isOk);
     thunkApi.dispatch(logAnswer({ quest, isOk }));
     await thunkApi.dispatch(saveCollections());
     if (isOk) {
+      console.log("3:", "update");
       thunkApi.dispatch(updateQuiz());
     }
   }
@@ -278,6 +308,8 @@ export const collectionsSlice = createSlice({
         fakes[newIndex] = value;
       });
       state.currentQuizData = {
+        type: cachedWords[showIndex].type,
+        url: cachedWords[showIndex].url,
         quest: cachedWords[showIndex].orig,
         answer: cachedWords[showIndex].translation,
         fakes,
@@ -289,7 +321,7 @@ export const collectionsSlice = createSlice({
           id: action.payload,
           isSelected: false,
           name: "",
-          sheetId: "",
+          url: "",
           state: "empty",
         },
         ...state.collections,
@@ -308,7 +340,7 @@ export const collectionsSlice = createSlice({
         id: cId,
         state: newState,
         isSelected,
-        sheetId,
+        url,
         words,
         name,
         okAnswers,
@@ -325,14 +357,18 @@ export const collectionsSlice = createSlice({
         item.state = newState;
       }
       if (isSelected !== undefined) {
-        item.isSelected = isSelected;
+        if (item.isSelected !== isSelected) {
+          item.isSelected = isSelected;
+          state.cachedWords = [];
+          state.cachedIndexes = [];
+        }
       }
-      if (sheetId !== undefined) {
-        if (sheetId !== item.sheetId) {
+      if (url !== undefined) {
+        if (url !== item.url) {
           item.words = [];
           item.state = "empty";
         }
-        item.sheetId = sheetId;
+        item.url = url;
       }
       if (name !== undefined) {
         item.name = name;
@@ -443,9 +479,7 @@ export const selectAnswerIsOk = createSelector(
   [selectCollections, (_, quest: string, answer: string) => [quest, answer]],
   ({ cachedWords }, [quest, answer]) => {
     return !!cachedWords.find(
-      ({ orig, translation }) =>
-        (orig === quest && answer === translation) ||
-        (orig === translation && answer === orig)
+      ({ orig, translation }) => orig === quest && answer === translation
     );
   }
 );

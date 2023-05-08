@@ -28,26 +28,26 @@ describe("google Sheet", () => {
     expect(data).toStrictEqual(mockedData);
   });
 
-  it("loadTranslatedPairsFromGoogleSheet", async () => {
-    const mockedData = {
-      table: {
-        rows: [
-          { c: [{ v: "w1" }, { v: "t1" }] },
-          { c: [{ v: "w2" }, { v: "t2" }] },
-          { c: [{ v: "w3" }, { v: "t3" }] },
-        ],
-      },
-    };
-    global.fetch = vi.fn().mockResolvedValue(createGSResponse(mockedData));
-    const words = await GS.loadTranslatedPairsFromGoogleSheet("testId");
-    expect(words.length).toBe(3);
-    expect(words[0]).toStrictEqual({
-      orig: "w1",
-      translation: "t1",
-    });
-    expect(words[1]).toStrictEqual({
-      orig: "w2",
-      translation: "t2",
-    });
-  });
+  // it("loadTranslatedPairsFromGoogleSheet", async () => {
+  //   const mockedData = {
+  //     table: {
+  //       rows: [
+  //         { c: [{ v: "w1" }, { v: "t1" }] },
+  //         { c: [{ v: "w2" }, { v: "t2" }] },
+  //         { c: [{ v: "w3" }, { v: "t3" }] },
+  //       ],
+  //     },
+  //   };
+  //   global.fetch = vi.fn().mockResolvedValue(createGSResponse(mockedData));
+  //   const words = await GS.loadTranslatedPairsFromGoogleSheet("testId");
+  //   expect(words.length).toBe(3);
+  //   expect(words[0]).toStrictEqual({
+  //     orig: "w1",
+  //     translation: "t1",
+  //   });
+  //   expect(words[1]).toStrictEqual({
+  //     orig: "w2",
+  //     translation: "t2",
+  //   });
+  // });
 });

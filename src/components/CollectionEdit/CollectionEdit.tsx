@@ -42,10 +42,11 @@ export const CollectionEdit = function ({
           defaultValue={data?.name}
         />
         <TextInput
-          key={`sheetId${collectionId}`}
-          name="sheetId"
-          label="Sheet Id"
-          defaultValue={data?.sheetId}
+          key={`url${collectionId}`}
+          name="url"
+          label="URL"
+          placeholder="Google Sheet or Flickr Photoset"
+          defaultValue={data?.url}
         />
         <IconCheckbox
           label="Use in quiz"

@@ -1,10 +1,10 @@
 # What is this?
 
-This is a foreign words trainer. You can see it [here](https://ghooost.github.io/vite-react-words/). In the Quiz mode, a word and several translation options are shown. If you answer correctly, the next word (or phrase) is displayed and so on.
+This is a foreign words trainer. You can see it [here](https://ghooost.github.io/vite-react-words/). In the Quiz mode, a word (or a picture) and several translation options are shown. If you answer correctly, the next word (or phrase) is displayed and so on.
 
-# Word collections.
+# Word collections
 
-You can manage word collections in the Setup. Each collection has a name (just a name, it's only needed to find the collection in the list) and a Google Sheet ID.
+You can manage word collections in the Setup. Each collection has a name (just a name, it's only needed to find the collection in the list) and an URL of Google Sheet or Flickr Album.
 
 # Google Sheet
 
@@ -13,13 +13,30 @@ Words and translations are initially stored in Google Sheets documents and impor
 - Create a Google Sheets document
 - Fill it with words (cells in column A) and translations (cells in column B)
 - Allow anyone to view the document
-- Add the collection with the ID of your document (you can just paste URL to your sheet to Sheet Id field)
+- Copy and paste URL to the collection properties
+- Mark the collection with a star
+
+# Flickr album
+
+Instead of using Google Sheets, you can use a Flickr album with pictures. In this case, during the Quiz mode, an image will be shown, and answer options will be generated from the titles of the pictures. So,
+
+- Upload pictures to Flickr
+- Collect them in an album
+  make sure the album is set to be viewable by everyone
+- Copy the album link from your browser's address bar. Note that the link should look something like this:
+  https://www.flickr.com/photos/xxxx/albums/yyyy
+  Flickr can shorten links, and in the Share window, it offers shortened links. However, we need the full links because we can use them to obtain your User Id and the album Id.
+- Paste the URL into the collection properties
 - Mark the collection with a star
 
 # Example Google Sheets
 
 - [Finnish Numbers](https://docs.google.com/spreadsheets/d/1jBgmXRnafIlAe4zAgZRAGdkBJw-ySHRfza5FPH4HNII/edit#gid=0)
 - [Finnish times](https://docs.google.com/spreadsheets/d/19URjKxbfUYtexfvENRGP8M1c-zKecPD2SfZBOpnHE0Q/edit#gid=0)
+
+# Example Flickr album
+
+- [Random Images](https://www.flickr.com/photos/198281950@N04/sets/72177720308121319/)
 
 # Collections with stars
 
@@ -40,6 +57,7 @@ The foreign words trainer itself is not particularly useful. Although I made it 
 # Tooling
 
 React, Redux, TypeScript, ReactRouter, Vite, Vitest, Scorebook, light/dark themes support.
+Google Sheet API, Flickr API.
 
 # Mobile and desktop interfaces
 
