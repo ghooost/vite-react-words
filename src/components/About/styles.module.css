@@ -1,0 +1,27 @@
+.root {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: row;
+}
+
+.maininfo {
+  flex: 1 1 60%;
+  padding: 1em 2em;
+}
+
+.devinfo {
+  flex: 1 1 30%;
+  padding: 1em 2em;
+}
+
+@media (max-width: 1000px) {
+  .root {
+    display: block;
+  }
+  .maininfo {
+    padding-bottom: 0;
+  }
+  .devinfo {
+    padding-top: 0;
+  }
+}

@@ -1,0 +1,116 @@
+import styles from "./styles.module.css";
+
+export const About = function () {
+  return (
+    <div className={styles.root}>
+      <div className={styles.maininfo}>
+        <h1>What is this?</h1>
+        <p>
+          This is a foreign words trainer. In the Quiz mode, a word (or a
+          picture) and several translation options are shown. If you answer
+          correctly, the next word (or phrase) is displayed and so on.{" "}
+        </p>
+        <h2>Word collections</h2>
+        <p>
+          You can manage word collections in the Setup. Each collection has a
+          name (just a name, it's only needed to find the collection in the
+          list) and an URL of Google Sheet or Flickr Album.
+        </p>
+        <h2>Google Sheet</h2>
+        <p>
+          Words and translations are initially stored in Google Sheets documents
+          and imported from there when needed. Thus, to add a word collection,
+          you need to:
+          <ul>
+            <li>Create a Google Sheets document</li>
+            <li>
+              Fill it with words (cells in column A) and translations (cells in
+              column B)
+            </li>
+            <li>Allow anyone to view the document</li>
+            <li>Copy and paste URL to the collection properties</li>
+            <li>Mark the collection with a star</li>
+          </ul>
+        </p>
+        <h2>Flickr albums</h2>
+        <p>
+          Instead of using Google Sheets, you can use a Flickr album with
+          pictures. In this case, during the Quiz mode, an image will be shown,
+          and answer options will be generated from the titles of the pictures.
+          So,
+          <ul>
+            <li>Upload pictures to Flickr</li>
+            <li>
+              Collect them in an album make sure the album is set to be viewable
+              by everyone
+            </li>
+            <li>
+              Copy the album link from your browser's address bar. Note that the
+              link should look something like this:
+              https://www.flickr.com/photos/xxxx/albums/yyyy Flickr can shorten
+              links, and in the Share window, it offers shortened links.
+              However, we need the full links because we can use them to obtain
+              your User Id and the album Id.
+            </li>
+            <li>Paste the URL into the collection properties</li>
+            <li>Mark the collection with a star</li>
+          </ul>
+        </p>
+        <h2>Example Google Sheets</h2>
+        <ul>
+          <li>
+            <a href="https://docs.google.com/spreadsheets/d/1jBgmXRnafIlAe4zAgZRAGdkBJw-ySHRfza5FPH4HNII/edit#gid=0">
+              Finnish Numbers
+            </a>
+          </li>
+          <li>
+            <a href="https://docs.google.com/spreadsheets/d/19URjKxbfUYtexfvENRGP8M1c-zKecPD2SfZBOpnHE0Q/edit#gid=0">
+              Finnish times
+            </a>
+          </li>
+        </ul>
+        <h2>Example Flickr album</h2>
+        <ul>
+          <li>
+            <a href="https://www.flickr.com/photos/198281950@N04/sets/72177720308121319/">
+              Random Images
+            </a>
+          </li>
+        </ul>
+        <h2>Collections with stars</h2>
+        <p>Words from collections marked with stars participate in the quiz.</p>
+        <h2>Statistics</h2>
+        <p>
+          In the collection settings, you can view the statistics of correct
+          answers and reset it.
+        </p>
+        <h2>Results saving</h2>
+        <p>
+          Your results and collections are saved on your computer. You can clear
+          them by resetting localStorage in your browser settings.
+        </p>
+      </div>
+      <div className={styles.devinfo}>
+        <h1>Motivation</h1>
+        <p>
+          The foreign words trainer itself is useful but nothing special.
+          Although I made it for myself to learn Finnish. However, the main
+          benefit is to create a simple showcase application in
+          React/Redux/TypeScript, configure the environment, linters, tests, and
+          a simple CI for GitHub Pages.
+        </p>
+        <h2>Tooling</h2>
+        <p>
+          React, Redux, TypeScript, ReactRouter, Vite, Vitest, Scorebook,
+          light/dark themes support. Google Sheet API, Flickr API.
+        </p>
+        <h2>Mobile and desktop interfaces</h2>
+        <p>
+          I deliberately refused to use media queries in favor of subscribing to
+          changes in window sizes and the useIsMobile hook. You can see the code
+          in src/components/IsMobile.
+        </p>
+      </div>
+    </div>
+  );
+};

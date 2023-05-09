@@ -21,6 +21,7 @@ import {
 } from "@store/collectionsSlice";
 import { Base } from "@router/contants";
 import { MobileCollectionList } from "@components/MobileCollectionList";
+import { About } from "@components/About";
 
 // loaders
 export const rootLoader = async () => {
@@ -93,6 +94,7 @@ export const router = createBrowserRouter(
           <Route path="delete" action={actionDelete}></Route>
         </Route>
       </Route>
+      <Route path="about" element={<About />} />
     </Route>
   )
 );

@@ -25,6 +25,9 @@ export const Menu = function () {
       <NavLink to={`${Base}setup`} className={getClassName}>
         Setup
       </NavLink>
+      <NavLink to={`${Base}about`} className={getClassName}>
+        About
+      </NavLink>
     </nav>
   );
 };
