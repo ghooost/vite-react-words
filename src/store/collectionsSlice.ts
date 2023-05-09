@@ -60,7 +60,7 @@ const initialState: CollectionsState = {
   cachedIndexes: [],
 };
 
-const defaultCollections: Collection[] = [
+export const defaultCollections: Collection[] = [
   {
     id: "def1",
     isSelected: true,
