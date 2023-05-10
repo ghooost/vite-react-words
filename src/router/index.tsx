@@ -2,7 +2,7 @@ import {
   ActionFunctionArgs,
   LoaderFunctionArgs,
   Route,
-  createBrowserRouter,
+  createHashRouter,
   createRoutesFromElements,
   redirect,
 } from "react-router-dom";
@@ -73,7 +73,7 @@ export const actionUpdate = async ({ request, params }: ActionFunctionArgs) => {
   return redirect(`${Base}setup/${collectionId}`);
 };
 
-export const router = createBrowserRouter(
+export const router = createHashRouter(
   createRoutesFromElements(
     <Route
       path={Base}
