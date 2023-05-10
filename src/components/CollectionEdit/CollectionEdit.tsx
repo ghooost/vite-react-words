@@ -61,6 +61,7 @@ export const CollectionEdit = function ({
           totalNum={numberOfWords}
           words={topWords}
           isLoading={data?.state === "loading"}
+          errorMessage={data?.errorMessage}
           onClick={onReload}
         />
         <StatisticField

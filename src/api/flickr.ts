@@ -1,6 +1,6 @@
 import { TranslatedPair } from "@store/collectionsSlice";
 
-const apiKey = "6d40fcf1f1b4ce6b06c93461bbabd7ff";
+const apiKey = import.meta.env.VITE_FLICKR_API_KEY;
 
 interface Photo {
   id: string;
@@ -14,18 +14,25 @@ interface FlickrPhotoSet {
   photoset: {
     photo: Photo[];
   };
-  stat: string;
+  stat: "ok";
   title: string;
 }
+
+interface FlickrError {
+  stat: "fail";
+  message: string;
+}
+
+type FlickrAnswer = FlickrPhotoSet | FlickrError;
 
 export const loadFlickrPhotoSet = async (
   userId: string,
   photosetId: string
 ) => {
-  const url = `https://www.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=${apiKey}&photoset_id=${photosetId}&user_id=${userId}&format=json&nojsoncallback=1&auth_token=72157720881668553-e1c0d03b1a9ee1cc&api_sig=63043e7af22f42ff39153fa46db3651c`;
+  const url = `https://www.flickr.com/services/rest/?method=flickr.photosets.getPhotos&api_key=${apiKey}&photoset_id=${photosetId}&user_id=${userId}&format=json&nojsoncallback=1`;
   try {
     const data = await fetch(url).then((response) => response.text());
-    return JSON.parse(data) as FlickrPhotoSet;
+    return JSON.parse(data) as FlickrAnswer;
   } catch (_) {
     return null;
   }
@@ -35,18 +42,32 @@ export const loadFlickrPhotoSet = async (
 export const loadTranslatedPairsFromFlickrWithUrl = async (url?: string) => {
   const id = parseFlickrId(url);
   if (id === null) {
-    return null;
+    return {
+      errorMessage: `Can't parse ids from the Url: ${url}`,
+      data: [],
+    };
   }
   const data = await loadFlickrPhotoSet(id.userId, id.photoSetId);
-  if (!data?.photoset.photo) {
-    return null;
+  if (!data) {
+    return {
+      errorMessage: `Wrong response from Flickr`,
+      data: [],
+    };
   }
-
+  if (data.stat === "fail") {
+    return {
+      errorMessage: data.message,
+      data: [],
+    };
+  }
   if (data.stat !== "ok") {
-    return null;
+    return {
+      errorMessage: `Wrong response from Flickr`,
+      data: [],
+    };
   }
 
-  return data.photoset.photo
+  const photos = data.photoset.photo
     .filter(({ ispublic }) => ispublic === 1)
     .map(({ id, secret, server, title }) => {
       return {
@@ -56,6 +77,11 @@ export const loadTranslatedPairsFromFlickrWithUrl = async (url?: string) => {
         translation: title,
       };
     }) as TranslatedPair[];
+
+  return {
+    errorMessage: "",
+    data: photos,
+  };
 };
 
 export const parseFlickrId = (url?: string) => {

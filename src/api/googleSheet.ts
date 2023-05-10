@@ -32,13 +32,19 @@ export const loadTranslatedPairsFromGoogleSheetWithUrl = async (
 ) => {
   const id = parseGoogleSheetId(url);
   if (!id) {
-    return [];
+    return {
+      errorMessage: `Can't parse ids from the Url: ${url}`,
+      data: [],
+    };
   }
   const data = await loadGoogleSheet(id);
   if (data === null) {
-    return [];
+    return {
+      errorMessage: `Wrong response from Google`,
+      data: [],
+    };
   }
-  return data?.table.rows.reduce((acc, { c: cells }) => {
+  const words = data?.table.rows.reduce((acc, { c: cells }) => {
     if (cells.length < 2) {
       return acc;
     }
@@ -52,6 +58,11 @@ export const loadTranslatedPairsFromGoogleSheetWithUrl = async (
     });
     return acc;
   }, [] as TranslatedPair[]);
+
+  return {
+    errorMessage: "",
+    data: words,
+  };
 };
 
 export const parseGoogleSheetId = (url?: string) => {

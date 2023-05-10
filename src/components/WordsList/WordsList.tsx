@@ -8,6 +8,7 @@ interface Props {
   words?: string[];
   totalNum: number;
   isLoading: boolean;
+  errorMessage?: string;
   onClick?: () => void;
 }
 
@@ -18,12 +19,16 @@ export const WordsList = function ({
   words,
   totalNum,
   isLoading,
+  errorMessage,
   onClick,
 }: Props) {
   const rootClass = [styles.root, className ?? ""].join(" ");
   const message = useMemo(() => {
     if (isLoading) {
       return "...";
+    }
+    if (errorMessage) {
+      return errorMessage;
     }
     const _words = words ?? [];
     const _totalNum = totalNum ?? 0;
@@ -34,7 +39,7 @@ export const WordsList = function ({
       return `${_words.join(", ")}... (${_totalNum})`;
     }
     return _words.join(", ");
-  }, [isLoading, totalNum, words]);
+  }, [isLoading, totalNum, words, errorMessage]);
 
   return (
     <label className={rootClass}>

@@ -33,6 +33,7 @@ export interface Collection {
   words?: TranslatedPair[] | null;
   okAnswers?: number;
   wrongAnswers?: number;
+  errorMessage?: string;
 }
 
 export interface QuizData {
@@ -133,7 +134,8 @@ export const prepareSelectedCollectios = createAsyncThunk(
           updateCollection({
             id: collection.id,
             state: "ready",
-            words,
+            words: words?.data ?? [],
+            errorMessage: words?.errorMessage,
           })
         );
         updatedCollections += 1;
@@ -156,6 +158,7 @@ export const loadCollectionData = createAsyncThunk(
       updateCollection({
         id,
         state: "loading",
+        errorMessage: "",
       })
     );
     const state = thunkApi.getState() as RootState;
@@ -168,7 +171,8 @@ export const loadCollectionData = createAsyncThunk(
       updateCollection({
         id: collection.id,
         state: "ready",
-        words,
+        words: words?.data ?? [],
+        errorMessage: words?.errorMessage,
       })
     );
 
@@ -222,13 +226,10 @@ export const processAnswer = createAsyncThunk(
   "collections/processAnswer",
   async ({ quest, answer }: ProcessAnswerPayload, thunkApi) => {
     const state = thunkApi.getState();
-    console.log("1:", quest, answer);
     const isOk = selectAnswerIsOk(state, quest, answer);
-    console.log("2:", isOk);
     thunkApi.dispatch(logAnswer({ quest, isOk }));
     await thunkApi.dispatch(saveCollections());
     if (isOk) {
-      console.log("3:", "update");
       thunkApi.dispatch(updateQuiz());
     }
   }
@@ -274,6 +275,8 @@ export const collectionsSlice = createSlice({
       collections.forEach(updater);
     },
     updateQuiz: (state) => {
+      const prevValue =
+        state.cachedIndexes.length > 0 ? state.cachedIndexes[0] : undefined;
       const cachedWords = state.cachedWords;
       const indexes = state.cachedIndexes.slice(1);
       if (indexes.length === 0) {
@@ -283,6 +286,10 @@ export const collectionsSlice = createSlice({
           cachedIndexes[index] = cachedIndexes[pairIndex];
           cachedIndexes[pairIndex] = item;
         });
+        if (cachedIndexes.length > 0 && cachedIndexes[0] === prevValue) {
+          cachedIndexes[0] = cachedIndexes[cachedIndexes.length - 1];
+          cachedIndexes[cachedIndexes.length - 1] = prevValue;
+        }
         state.cachedIndexes = cachedIndexes;
       } else {
         state.cachedIndexes = indexes;
@@ -345,6 +352,7 @@ export const collectionsSlice = createSlice({
         name,
         okAnswers,
         wrongAnswers,
+        errorMessage,
       } = action.payload;
       if (!cId) {
         return;
@@ -381,6 +389,9 @@ export const collectionsSlice = createSlice({
       }
       if (wrongAnswers !== undefined) {
         item.wrongAnswers = wrongAnswers === 0 ? undefined : wrongAnswers;
+      }
+      if (errorMessage !== undefined) {
+        item.errorMessage = errorMessage;
       }
     },
   },
