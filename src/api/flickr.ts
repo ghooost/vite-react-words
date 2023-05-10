@@ -1,4 +1,4 @@
-import { TranslatedPair } from "@store/collectionsSlice";
+import { ApiResponse, TranslatedPair } from "@store/collectionsSlice";
 
 const apiKey = import.meta.env.VITE_FLICKR_API_KEY;
 
@@ -39,7 +39,9 @@ export const loadFlickrPhotoSet = async (
 };
 
 // https://www.flickr.com/photos/198281950@N04/albums/72177720308121319/with/52880824056/
-export const loadTranslatedPairsFromFlickrWithUrl = async (url?: string) => {
+export const loadTranslatedPairsFromFlickrWithUrl = async (
+  url?: string
+): Promise<ApiResponse> => {
   const id = parseFlickrId(url);
   if (id === null) {
     return {

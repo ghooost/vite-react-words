@@ -23,6 +23,11 @@ export type TranslatedPair = {
   translation: string;
 };
 
+export type ApiResponse = {
+  errorMessage: string;
+  data: TranslatedPair[] | null;
+};
+
 type State = "empty" | "loading" | "saving" | "ready";
 export interface Collection {
   id: string;
@@ -111,7 +116,10 @@ const loadCollection = async (collection: Collection) => {
   if (isFlickrPhotoSetUrl(collection.url)) {
     return await loadTranslatedPairsFromFlickrWithUrl(collection.url);
   }
-  return null;
+  return {
+    errorMessage: "Unrecognized Url",
+    data: [],
+  };
 };
 
 export const prepareSelectedCollectios = createAsyncThunk(
@@ -134,8 +142,8 @@ export const prepareSelectedCollectios = createAsyncThunk(
           updateCollection({
             id: collection.id,
             state: "ready",
-            words: words?.data ?? [],
-            errorMessage: words?.errorMessage,
+            words: words.data ?? [],
+            errorMessage: words.errorMessage,
           })
         );
         updatedCollections += 1;
@@ -171,8 +179,8 @@ export const loadCollectionData = createAsyncThunk(
       updateCollection({
         id: collection.id,
         state: "ready",
-        words: words?.data ?? [],
-        errorMessage: words?.errorMessage,
+        words: words.data ?? [],
+        errorMessage: words.errorMessage,
       })
     );
 

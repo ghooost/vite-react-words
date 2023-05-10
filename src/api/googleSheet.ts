@@ -1,4 +1,4 @@
-import { TranslatedPair } from "@store/collectionsSlice";
+import { ApiResponse, TranslatedPair } from "@store/collectionsSlice";
 
 // GoogleSheet types
 interface GoogleSheetCell {
@@ -29,7 +29,7 @@ export const loadGoogleSheet = async (id: string) => {
 
 export const loadTranslatedPairsFromGoogleSheetWithUrl = async (
   url?: string
-) => {
+): Promise<ApiResponse> => {
   const id = parseGoogleSheetId(url);
   if (!id) {
     return {
