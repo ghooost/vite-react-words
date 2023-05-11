@@ -1,0 +1,9 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Menu > Menu / 1`] = `"<nav class=\\"_root_ff9f9e\\"><a aria-current=\\"page\\" class=\\"_item_ff9f9e _active_ff9f9e \\" href=\\"/\\">Quiz</a><a class=\\"_item_ff9f9e  \\" href=\\"/setup\\">Setup</a><a class=\\"_item_ff9f9e  \\" href=\\"/about\\">About</a></nav>"`;
+
+exports[`Menu > Menu /about 1`] = `"<nav class=\\"_root_ff9f9e\\"><a class=\\"_item_ff9f9e  \\" href=\\"/\\">Quiz</a><a class=\\"_item_ff9f9e  \\" href=\\"/setup\\">Setup</a><a aria-current=\\"page\\" class=\\"_item_ff9f9e _active_ff9f9e \\" href=\\"/about\\">About</a></nav>"`;
+
+exports[`Menu > Menu /setup 1`] = `"<nav class=\\"_root_ff9f9e\\"><a class=\\"_item_ff9f9e  \\" href=\\"/\\">Quiz</a><a aria-current=\\"page\\" class=\\"_item_ff9f9e _active_ff9f9e \\" href=\\"/setup\\">Setup</a><a class=\\"_item_ff9f9e  \\" href=\\"/about\\">About</a></nav>"`;
+
+exports[`Menu > Menu /setup/something 1`] = `"<nav class=\\"_root_ff9f9e\\"><a class=\\"_item_ff9f9e  \\" href=\\"/\\">Quiz</a><a aria-current=\\"page\\" class=\\"_item_ff9f9e _active_ff9f9e \\" href=\\"/setup\\">Setup</a><a class=\\"_item_ff9f9e  \\" href=\\"/about\\">About</a></nav>"`;
