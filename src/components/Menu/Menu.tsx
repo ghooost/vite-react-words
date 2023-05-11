@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import { Base } from "@router/contants";
 
 import styles from "./styles.module.css";
+import { useI18n } from "../../i18n/useI18n";
 
 const getClassName = ({
   isActive,
@@ -17,16 +18,17 @@ const getClassName = ({
   ].join(" ");
 
 export const Menu = function () {
+  const { t } = useI18n();
   return (
     <nav className={styles.root}>
       <NavLink to={Base} end className={getClassName}>
-        Quiz
+        {t("quiz")}
       </NavLink>
       <NavLink to={`${Base}setup`} className={getClassName}>
-        Setup
+        {t("setup")}
       </NavLink>
       <NavLink to={`${Base}about`} className={getClassName}>
-        About
+        {t("about")}
       </NavLink>
     </nav>
   );

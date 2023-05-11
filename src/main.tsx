@@ -8,12 +8,15 @@ import { router } from "./router";
 
 import "./index.css";
 import { IsMobile } from "@components/IsMobile";
+import { I18n } from "./i18n";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>
       <IsMobile mobileWidth={800}>
-        <RouterProvider router={router} />
+        <I18n>
+          <RouterProvider router={router} />
+        </I18n>
       </IsMobile>
     </Provider>
   </React.StrictMode>

@@ -10,6 +10,7 @@ import { Button } from "@components/Button";
 
 import styles from "./styles.module.css";
 import { Base } from "@router/contants";
+import { useI18n } from "../../i18n/useI18n";
 
 interface Props {
   data?: Collection;
@@ -26,6 +27,7 @@ export const CollectionEdit = function ({
   onDelete,
   onResetStat,
 }: Props) {
+  const { t } = useI18n();
   if (data === undefined) {
     return null;
   }
@@ -33,8 +35,6 @@ export const CollectionEdit = function ({
   const numberOfWords = data.words?.length ?? 0;
   const topWords = data.words?.slice(0, 5).map(({ orig }) => orig);
   const collectionId = data.id;
-
-  console.log(isMobile);
 
   return (
     <div className={styles.root}>
@@ -48,25 +48,25 @@ export const CollectionEdit = function ({
           autofocus
           key={`name${collectionId}`}
           name="name"
-          label="Name"
+          label={t("name")}
           defaultValue={data?.name}
         />
         <TextInput
           key={`url${collectionId}`}
           name="url"
-          label="URL"
-          placeholder="Google Sheet or Flickr Photoset"
+          label={t("url")}
+          placeholder={t("urlPlaceholder")}
           defaultValue={data?.url}
         />
         <IconCheckbox
-          label="Use in quiz"
+          label={t("useInQuiz")}
           name="isSelected"
           key={`isSelected${collectionId}`}
           defaultChecked={data?.isSelected}
         />
         <WordsList
-          label="Words"
-          linkText="Reload"
+          label={t("words")}
+          linkText={t("reload")}
           totalNum={numberOfWords}
           words={topWords}
           isLoading={data?.state === "loading"}
@@ -74,17 +74,17 @@ export const CollectionEdit = function ({
           onClick={onReload}
         />
         <StatisticField
-          label="Correct answers"
-          linkText="Reset"
+          label={t("correctAnswers")}
+          linkText={t("reset")}
           okAnswers={data?.okAnswers}
           wrongAnswers={data?.wrongAnswers}
           onClick={onResetStat}
         />
         <FieldBlock>
           <>
-            <Button type="submit">Update</Button>
+            <Button type="submit">{t("update")}</Button>
             <a className={styles.service} onClick={onDelete}>
-              Delete
+              {t("delete")}
             </a>
           </>
         </FieldBlock>
