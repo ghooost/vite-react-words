@@ -5,7 +5,7 @@ import styles from "./styles.module.css";
 interface Props {
   preparationState: Collection["state"];
   data: QuizData | null;
-  onClick: (word: string) => void;
+  onClick: (word: string, target: EventTarget) => void;
 }
 
 export const Home = function ({ preparationState, data, onClick }: Props) {
@@ -27,7 +27,11 @@ export const Home = function ({ preparationState, data, onClick }: Props) {
       </div>
       <div className={styles.answers}>
         {fakes.map((word) => (
-          <a key={word} className={styles.answer} onClick={() => onClick(word)}>
+          <a
+            key={word}
+            className={styles.answer}
+            onClick={(e) => onClick(word, e.target)}
+          >
             {word}
           </a>
         ))}

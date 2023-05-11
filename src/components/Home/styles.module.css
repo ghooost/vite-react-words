@@ -38,3 +38,19 @@
   cursor: pointer;
   word-wrap: none;
 }
+
+.answer[data-wrong="yes"] {
+  animation: shake 0.3s 1;
+}
+
+@keyframes shake {
+  0% {
+    transform: scale(0.5);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

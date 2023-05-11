@@ -240,6 +240,7 @@ export const processAnswer = createAsyncThunk(
     if (isOk) {
       thunkApi.dispatch(updateQuiz());
     }
+    return isOk;
   }
 );
 
