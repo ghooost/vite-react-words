@@ -4,7 +4,7 @@ import styles from "./styles.module.css";
 interface Props {
   name?: string;
   id?: string;
-  ico: IconProps["type"];
+  ico?: IconProps["type"];
   label?: string;
   className?: string;
   defaultChecked?: boolean;
@@ -53,9 +53,11 @@ export const IconCheckbox = function ({
         <input
           type="checkbox"
           {...inputProps}
-          className={styles.hiddenCheckbox}
+          className={
+            ico !== undefined ? styles.hiddenCheckbox : styles.visibleCheckbox
+          }
         />
-        <Icon type={ico} className={styles.icon}></Icon>
+        {!!ico && <Icon type={ico} className={styles.icon}></Icon>}
       </span>
     </label>
   );

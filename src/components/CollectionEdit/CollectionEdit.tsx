@@ -1,5 +1,5 @@
 import { Collection } from "@store/collectionsSlice";
-import { Form } from "react-router-dom";
+import { Form, Link } from "react-router-dom";
 
 import { TextInput } from "@components/TextInput";
 import { IconCheckbox } from "@components/IconCheckbox";
@@ -9,9 +9,11 @@ import { StatisticField } from "@components/StatisticField";
 import { Button } from "@components/Button";
 
 import styles from "./styles.module.css";
+import { Base } from "@router/contants";
 
 interface Props {
   data?: Collection;
+  isMobile?: boolean;
   onReload: () => void;
   onDelete: () => void;
   onResetStat: () => void;
@@ -19,6 +21,7 @@ interface Props {
 
 export const CollectionEdit = function ({
   data,
+  isMobile,
   onReload,
   onDelete,
   onResetStat,
@@ -31,8 +34,15 @@ export const CollectionEdit = function ({
   const topWords = data.words?.slice(0, 5).map(({ orig }) => orig);
   const collectionId = data.id;
 
+  console.log(isMobile);
+
   return (
     <div className={styles.root}>
+      {isMobile === true && (
+        <Link to={`${Base}setup`} className={styles.backLink}>
+          List of collections
+        </Link>
+      )}
       <Form method="post">
         <TextInput
           autofocus
@@ -50,7 +60,6 @@ export const CollectionEdit = function ({
         />
         <IconCheckbox
           label="Use in quiz"
-          ico="star"
           name="isSelected"
           key={`isSelected${collectionId}`}
           defaultChecked={data?.isSelected}

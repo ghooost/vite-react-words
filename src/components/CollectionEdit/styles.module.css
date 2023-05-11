@@ -44,3 +44,10 @@ a.service {
 .hiddenCheckbox:checked ~ .star {
   fill: var(--link-text);
 }
+
+.backLink {
+  text-decoration: none;
+  color: var(--link-text);
+  display: block;
+  margin-bottom: 1em;
+}

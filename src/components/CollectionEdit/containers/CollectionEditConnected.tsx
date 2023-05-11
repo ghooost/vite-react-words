@@ -8,6 +8,7 @@ import { useCallback } from "react";
 import { useSelector } from "react-redux";
 import { useLoaderData, useSubmit } from "react-router-dom";
 import { CollectionEdit } from "../CollectionEdit";
+import { useIsMobile } from "@components/IsMobile/useIsMobile";
 
 export const CollectionEditConnected = function () {
   const dispatch = useAppDispatch();
@@ -31,9 +32,13 @@ export const CollectionEditConnected = function () {
     );
   }, [collectionId, dispatch]);
 
+  const isMobile = useIsMobile();
+  console.log(isMobile);
+
   return (
     <CollectionEdit
       data={data}
+      isMobile={isMobile}
       onReload={handleReload}
       onDelete={handleDelete}
       onResetStat={handleResetStat}

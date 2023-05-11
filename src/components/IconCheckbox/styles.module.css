@@ -32,6 +32,10 @@
   display: none;
 }
 
+.visibleCheckbox {
+  display: inline-block;
+}
+
 .icon {
   stroke: currentColor;
   fill: none;
