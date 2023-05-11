@@ -1,3 +1,8 @@
+import aboutCustomerEn from "./assets/about.customer.en.html?raw";
+import aboutDevEn from "./assets/about.dev.en.html?raw";
+import aboutCustomerRu from "./assets/about.customer.ru.html?raw";
+import aboutDevRu from "./assets/about.dev.ru.html?raw";
+
 export const config = {
   version: 0.1,
   locales: {
@@ -18,6 +23,8 @@ export const config = {
         reset: "Reset",
         update: "Update",
         delete: "Delete",
+        aboutCustomer: aboutCustomerEn,
+        aboutDev: aboutDevEn,
       },
     },
     ru: {
@@ -37,6 +44,8 @@ export const config = {
         reset: "сбросить",
         update: "Сохранить",
         delete: "Удалить",
+        aboutCustomer: aboutCustomerRu,
+        aboutDev: aboutDevRu,
       },
     },
   },

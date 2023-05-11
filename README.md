@@ -57,7 +57,7 @@ The foreign words trainer itself is not particularly useful. Although I made it 
 # Tooling
 
 React, Redux, TypeScript, ReactRouter, Vite, Vitest, Scorebook, light/dark themes support.
-Google Sheet API, Flickr API.
+Google Sheet API, Flickr API, i18n with TypeScript support.
 
 # Mobile and desktop interfaces
 

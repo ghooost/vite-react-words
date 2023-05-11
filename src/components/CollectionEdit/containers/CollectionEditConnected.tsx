@@ -33,7 +33,6 @@ export const CollectionEditConnected = function () {
   }, [collectionId, dispatch]);
 
   const isMobile = useIsMobile();
-  console.log(isMobile);
 
   return (
     <CollectionEdit
