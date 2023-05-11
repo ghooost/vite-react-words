@@ -23,15 +23,13 @@ interface Props {
 export const CollectionList = function ({ collections, onCreate }: Props) {
   return (
     <nav className={styles.root}>
-      <div className={styles.servicePanel}>
-        <a className={styles.service} onClick={onCreate}>
-          New connection
-        </a>
-      </div>
+      <a className={styles.service} onClick={onCreate}>
+        New connection
+      </a>
       {collections.map(({ id, name, isSelected }) => (
         <NavLink key={id} to={id} className={getClassName(isSelected)}>
-          <Icon type="star" className={styles.ico} />
           <span className={styles.name}>{name || "No name"}</span>
+          <Icon type="star" className={styles.ico} />
         </NavLink>
       ))}
     </nav>
