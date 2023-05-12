@@ -25,6 +25,9 @@ export const CollectionList = function ({ collections, onCreate }: Props) {
   const { t } = useI18n();
   return (
     <nav className={styles.root}>
+      <NavLink to={`interface`} className={getClassName(false)}>
+        {t("interface")}
+      </NavLink>
       <a className={styles.service} onClick={onCreate}>
         {t("new")}
       </a>

@@ -14,7 +14,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>
       <IsMobile mobileWidth={800}>
-        <I18n>
+        <I18n useLocalStorage lang="en">
           <RouterProvider router={router} />
         </I18n>
       </IsMobile>

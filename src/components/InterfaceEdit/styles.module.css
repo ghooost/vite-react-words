@@ -1,0 +1,53 @@
+.root {
+  padding: 1em;
+}
+
+/* .field {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 1em;
+  align-items: center;
+}
+
+.label {
+  flex: 0 0 100px;
+}
+
+.input {
+  display: block;
+  padding: 0.5em;
+  box-sizing: border-box;
+  flex: 1 1 auto;
+}
+
+.service {
+  padding: 0.5em;
+  margin: 0 1em;
+  cursor: pointer;
+}
+
+a.service {
+  color: var(--link-text);
+}
+
+.hiddenCheckbox {
+  display: none;
+}
+
+.star {
+  width: 16px;
+  height: 16px;
+  fill: var(--canvas);
+  stroke: var(--link-text);
+}
+
+.hiddenCheckbox:checked ~ .star {
+  fill: var(--link-text);
+}
+*/
+.backLink {
+  text-decoration: none;
+  color: var(--link-text);
+  display: block;
+  margin-bottom: 1em;
+}

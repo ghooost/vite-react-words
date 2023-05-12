@@ -48,7 +48,7 @@ export const IconCheckbox = function ({
 
   return (
     <label className={rootClass}>
-      {label && <span className={styles.label}>{label}</span>}
+      {label && <span className={styles.label}>{label}:</span>}
       <span className={styles.field}>
         <input
           type="checkbox"

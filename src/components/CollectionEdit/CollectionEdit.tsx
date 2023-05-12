@@ -40,7 +40,7 @@ export const CollectionEdit = function ({
     <div className={styles.root}>
       {isMobile === true && (
         <Link to={`${Base}setup`} className={styles.backLink}>
-          List of collections
+          {t("listOfCollections")}
         </Link>
       )}
       <Form method="post">

@@ -12,6 +12,7 @@ export default defineConfig({
       "@components": path.resolve(__dirname, "./src/components"),
       "@store": path.resolve(__dirname, "./src/store"),
       "@router": path.resolve(__dirname, "./src/router"),
+      "@i18n": path.resolve(__dirname, "./src/i18n"),
     },
   },
   base: "/vite-react-words/",

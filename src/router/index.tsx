@@ -22,6 +22,7 @@ import {
 import { Base } from "@router/contants";
 import { MobileCollectionList } from "@components/MobileCollectionList";
 import { About } from "@components/About";
+import { InterfaceEdit } from "@components/InterfaceEdit/InterfaceEdit";
 
 // loaders
 export const rootLoader = async () => {
@@ -93,6 +94,7 @@ export const router = createHashRouter(
         >
           <Route path="delete" action={actionDelete}></Route>
         </Route>
+        <Route path={"interface"} element={<InterfaceEdit />} />
       </Route>
       <Route path="about" element={<About />} />
     </Route>

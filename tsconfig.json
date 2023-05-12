@@ -24,7 +24,8 @@
       "@router/*": ["./src/router/*"],
       "@components/*": ["./src/components/*"],
       "@store/*": ["./src/store/*"],
-      "@api/*": ["./src/api/*"]
+      "@api/*": ["./src/api/*"],
+      "@i18n/*": ["./src/i18n/*"]
     }
     // "types": ["vite/client"]
   },
