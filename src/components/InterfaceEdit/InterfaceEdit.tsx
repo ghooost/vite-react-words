@@ -3,17 +3,16 @@ import { Link } from "react-router-dom";
 import styles from "./styles.module.css";
 import { Base } from "@router/contants";
 import { Radio } from "@components/Radio";
-// import { Lang } from "@i18n/index";
 import { useI18n } from "@i18n/useI18n";
+import { useTheme } from "@components/Theme/useTheme";
 
 interface Props {
   isMobile?: boolean;
-  // onChangeLanguage: (lang: Lang) => void;
 }
 
 export const InterfaceEdit = function ({ isMobile }: Props) {
   const { t, lang, availableLangs, setLang } = useI18n();
-
+  const { theme, availableThemes, setTheme } = useTheme();
   return (
     <div className={styles.root}>
       {isMobile === true && (
@@ -27,6 +26,13 @@ export const InterfaceEdit = function ({ isMobile }: Props) {
         options={availableLangs}
         defaultValue={lang}
         onClick={setLang}
+      />
+      <Radio
+        name="theme"
+        label={t("theme")}
+        options={availableThemes}
+        defaultValue={theme}
+        onClick={setTheme}
       />
     </div>
   );

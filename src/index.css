@@ -2,29 +2,38 @@
   --main-font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   --main-font-size: 16px;
 
-  --accent-color-text: AccentColorText;
-  --active-text: ActiveText;
+  --color-light: #000;
+  --main-bg-color-light: #fff;
+  --highlight-text-light: #000;
+  --canvas-light: #fff;
+  --canvas-text-light: #000;
+  --gray-text-light: rgba(0, 0, 0, 0.5);
+  --button-face-light: #fff;
+  --button-text-light: rgba(0, 0, 0, 0.5);
+  --field-light: #fff;
+  --field-text-light: #000;
+  --button-border-light: 1px solid rgba(0, 0, 0, 0.2);
+  --button-shadow-light: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  --link-text-light: rgb(0, 0, 238);
+  --highlight-light: rgba(128, 188, 254, 0.6);
 
-  --highlight: Highlight;
-  --highlight-text: HighlightText;
+  --color-dark: #fff;
+  --main-bg-color-dark: #000;
+  --highlight-text-dark: #fff;
+  --canvas-dark: #000;
+  --canvas-text-dark: #fff;
+  --gray-text-dark: rgba(255, 255, 255, 0.5);
+  --button-face-dark: #fff;
+  --button-text-dark: rgba(255, 255, 255, 0.5);
+  --field-dark: #000;
+  --field-text-dark: #fff;
+  --button-border-dark: 1px solid rgba(255, 255, 255, 0.2);
+  --button-shadow-dark: 1px 1px 2px rgba(255, 255, 255, 0.1);
+  --link-text-dark: rgb(181, 213, 255);
+  --highlight-dark: rgba(181, 213, 255, 0.5);
 
-  --link-text: LinkText;
-
-  --canvas: Canvas;
-  --canvas-text: CanvasText;
-  --gray-text: GrayText;
-
-  --button-face: ButtonFace;
-  --button-text: ButtonText;
-
-  --field: Field;
-  --field-text: FieldText;
   --field-margin-bottom: 20px;
-
-  --button-border: 1px solid rgba(0, 0, 0, 0.2);
-  --button-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
   --border-radius: 4px;
-
   font-family: var(--main-font-family);
   font-size: var(--main-font-size);
   line-height: 1.5;
@@ -32,22 +41,88 @@
   color-scheme: light dark;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --button-border: 1px solid rgba(255, 255, 255, 0.2);
-    --button-shadow: 1px 1px 2px rgba(255, 255, 255, 0.1);
-
-    --link-text: rgb(181, 213, 255);
-    --highlight: rgba(181, 213, 255, 0.5);
+@media (prefers-color-scheme: light) {
+  body {
+    --color: var(--color-light);
+    --main-bg-color: var(--main-bg-color-light);
+    --highlight-text: var(--highlight-text-light);
+    --canvas: var(--canvas-light);
+    --canvas-text: var(--canvas-text-light);
+    --gray-text: var(--gray-text-light);
+    --button-face: var(--button-face-light);
+    --button-text: var(--button-text-light);
+    --field: var(--field-light);
+    --field-text: var(--field-text-light);
+    --button-border: var(--button-border-light);
+    --button-shadow: var(--button-shadow-light);
+    --link-text: var(--link-text-light);
+    --highlight: var(--highlight-light);
   }
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    --color: var(--color-dark);
+    --main-bg-color: var(--main-bg-color-dark);
+    --highlight-text: var(--highlight-text-dark);
+    --canvas: var(--canvas-dark);
+    --canvas-text: var(--canvas-text-dark);
+    --gray-text: var(--gray-text-dark);
+    --button-face: var(--button-face-dark);
+    --button-text: var(--button-text-dark);
+    --field: var(--field-dark);
+    --field-text: var(--field-text-dark);
+    --button-border: var(--button-border-dark);
+    --button-shadow: var(--button-shadow-dark);
+    --link-text: var(--link-text-dark);
+    --highlight: var(--highlight-dark);
+  }
+}
+
+body[data-theme="light"] {
+  --color: var(--color-light);
+  --main-bg-color: var(--main-bg-color-light);
+  --highlight-text: var(--highlight-text-light);
+  --canvas: var(--canvas-light);
+  --canvas-text: var(--canvas-text-light);
+  --gray-text: var(--gray-text-light);
+  --button-face: var(--button-face-light);
+  --button-text: var(--button-text-light);
+  --field: var(--field-light);
+  --field-text: var(--field-text-light);
+  --button-border: var(--button-border-light);
+  --button-shadow: var(--button-shadow-light);
+  --link-text: var(--link-text-light);
+  --highlight: var(--highlight-light);
+}
+
+body[data-theme="dark"] {
+  --color: var(--color-dark);
+  --main-bg-color: var(--main-bg-color-dark);
+  --highlight-text: var(--highlight-text-dark);
+  --canvas: var(--canvas-dark);
+  --canvas-text: var(--canvas-text-dark);
+  --gray-text: var(--gray-text-dark);
+  --button-face: var(--button-face-dark);
+  --button-text: var(--button-text-dark);
+  --field: var(--field-dark);
+  --field-text: var(--field-text-dark);
+  --button-border: var(--button-border-dark);
+  --button-shadow: var(--button-shadow-dark);
+  --link-text: var(--link-text-dark);
+  --highlight: var(--highlight-dark);
 }
 
 body {
   display: block;
   margin: 0;
   padding: 0;
-  color: var(--color);
   background-color: var(--main-bg-color);
+  color: var(--color);
+}
+
+a {
+  color: var(--link-text);
 }
 
 #root {

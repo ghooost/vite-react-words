@@ -7,7 +7,7 @@
   flex-direction: row;
   align-items: center;
   text-decoration: none;
-  color: var(--canvas-text);
+  color: var(--link-text);
   overflow: hidden;
   text-overflow: ellipsis;
   padding: 1em;
@@ -31,17 +31,17 @@
   width: 16px;
   height: 16px;
   fill: var(--canvas);
-  stroke: var(--canvas-text);
+  stroke: var(--link-text);
   flex: 0 0 16px;
 }
 
 .active .ico {
   stroke: var(--highlight-text);
-  fill: var(--canvas);
+  fill: var(--highlight);
 }
 
 .selected .ico {
-  fill: var(--canvas-text);
+  fill: var(--link-text);
 }
 
 .selected.active .ico {

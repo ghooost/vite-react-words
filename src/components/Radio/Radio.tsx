@@ -1,4 +1,3 @@
-import { Lang } from "@i18n/index";
 import styles from "./styles.module.css";
 
 interface Option {
@@ -11,9 +10,9 @@ interface Props {
   id?: string;
   label?: string;
   className?: string;
-  defaultValue?: string;
+  defaultValue?: string | null;
   options?: Option[] | string[];
-  onClick?: (value: Lang) => void;
+  onClick?: (value: string) => void;
 }
 
 export const Radio = function ({
@@ -47,7 +46,7 @@ export const Radio = function ({
               type="radio"
               value={localValue}
               checked={localValue === defaultValue}
-              onClick={() => (onClick ? onClick(localValue as Lang) : null)}
+              onChange={() => (onClick ? onClick(localValue) : null)}
               tabIndex={0}
               {...inputProps}
             />

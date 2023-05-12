@@ -22,7 +22,7 @@ import {
 import { Base } from "@router/contants";
 import { MobileCollectionList } from "@components/MobileCollectionList";
 import { About } from "@components/About";
-import { InterfaceEdit } from "@components/InterfaceEdit/InterfaceEdit";
+import { InterfaceEdit } from "@components/InterfaceEdit";
 
 // loaders
 export const rootLoader = async () => {

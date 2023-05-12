@@ -1,1 +1,1 @@
-export { InterfaceEditConnected as IntefaceEdit } from "./containers/InterfaceEditConnected";
+export { InterfaceEditConnected as InterfaceEdit } from "./containers/InterfaceEditConnected";

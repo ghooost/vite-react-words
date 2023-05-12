@@ -22,7 +22,7 @@
 .field {
   flex: 0 1 auto;
   border: none;
-  color: var(--color-gray-text, GrayText);
+  color: var(--gray-text, GrayText);
   padding: 4px 8px;
   margin: 0;
   box-sizing: border-box;
